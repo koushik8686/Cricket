@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="variables.css">
+    <style>
+        /* global.css */
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: #f5f0f0; /* Light reddish background */
+        }
+
+        .container {
+            max-width: var(--container-max-width);
+            margin: 20px auto;
+            padding: var(--container-padding);
+            background-color: #fff; /* White background */
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #bf4040; /* Reddish color for headings */
+        }
+
+        form {
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #bf4040; /* Reddish background for buttons */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #801515; /* Darker reddish color on hover */
+        }
+
+        .player {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f0f0; /* Light grayish background for players */
+            border-radius: 5px;
+            height: 7vh;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .player hr {
+            border: none;
+            border-top: 1px solid #ccc;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        /* responsive.css */
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            input[type="text"], button {
+                width: calc(100% - 20px);
+            }
+            button {
+                margin-top: 10px;
+            }
+        }
+
+        @media only screen and (max-width: 400px) {
+            .container {
+                padding: 5px;
+            }
+            input[type="text"], button {
+                width: calc(100% - 10px);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>Add Player</h1>
+<form action="/addplayers" method="post">
+    <input type="text" name="name" placeholder="Playername">
+    <button type="submit">Add</button>
+    <a  href="/"><button>Back</button></a>
+</form>
+<h2>Players</h2>
+
+<% for (let i = 0; i < players.length; i++) { %>
+<a href="/player/<%= players[i]._id %>">
+    <div class="player">
+        <%= players[i].name %>
+        <hr>
+    </div>
+</a>
+<%  } %>
+
+</body>
+</html>

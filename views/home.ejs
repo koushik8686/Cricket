@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    /* General styles */
+    body {
+        font-family: sans-serif;  /* Set a basic font family */
+        margin: 0;               /* Remove default browser margins */
+        padding: 0;              /* Remove default browser padding */
+        background-color: #f5f0f0;  /* Light reddish background */
+    }
+
+    /* Container styles */
+    .container {
+        display: flex;           /* Arrange buttons horizontally */
+        flex-wrap: wrap;          /* Wrap buttons onto next line if needed */
+        justify-content: center;  /* Center buttons horizontally */
+        margin: 20px auto;       /* Add some margin for better spacing */
+    }
+
+    /* Button styles */
+    .button {
+        margin: 10px;            /* Add space between buttons */
+        padding: 15px 30px;      /* Add padding for text */
+        height: 60px;            /* Button height */
+        border-radius: 10px;       /* Rounded corners */
+        text-decoration: none;   /* Remove underline from links */
+        color: #fff;             /* White text color */
+        text-align: center; 
+        display: flex;
+        justify-content: center;
+        align-items: center;     /* Center text within buttons */
+        transition: background-color 0.3s ease;  /* Smooth hover effect */
+    }
+
+    a.button {
+        background-color: #bf4040;  /* Reddish background */
+    }
+
+    a.button:hover {
+        background-color: #801515;  /* Darker reddish background on hover */
+    }
+
+    a.button:link,
+    a.button:visited,
+    a.button:active {
+        color: white;  /* White text color for links */
+        text-decoration: none;  /* Remove underline from links */
+    }
+
+    /* Media query for smaller screens (adjust breakpoint as needed) */
+    @media (max-width: 600px) {
+        .button {
+            width: 100%;  /* Make buttons full width on smaller screens */
+        }
+    }
+</style>
+<body>
+    <h1 style="text-align: center;">CRICKET</h1>
+    <div class="container">
+        <a href="/addplayers" class="button">
+            Add New Player
+        </a>
+        <a href="/players" class="button">
+            Players
+        </a>
+        <a href="/creatematch" class="button">
+            New Match
+        </a>
+        <a href="/matches" class="button">
+            Matches
+        </a>
+    </div>
+</body>
+</html>

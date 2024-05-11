@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Details</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Container Styles */
+        .container {
+            max-width: 800px;
+            margin: 20px ;
+            padding: 20px;
+            color: #ff6363; /* Red text color */
+            background-color: #ffecf2; /* Light red background */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding-bottom: 20vh;
+        }
+        
+        /* Header Styles */
+        h1 {
+            color: #321E1E; /* Pinkish-red color */
+            text-align: center;
+            font-weight: bold; /* Add font weight for better readability */
+        }
+        
+        /* Player Info Styles */
+        .player-info {
+            margin-top: 20px;
+            color: #321E1E;
+        }
+        
+        /* Stats Styles */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        /* Category Styles */
+        .stats .category {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ff6363; /* Red border */
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff; /* White background */
+        }
+        
+        /* Category Header Styles */
+        .stats .category h3 {
+            margin-top: 0;
+            color: #e73a5f; /* Pinkish-red color */
+        }
+        
+        /* Add some color to the stats */
+        .button {
+            margin-top: 7vh;
+            margin-left: 30vw;
+            color: #fff; /* White text color */
+            background-color: #e73a5f; /* Pinkish-red background */
+            font-weight: 500;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            line-height: 2rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            padding-top: 0.7rem;
+            padding-bottom: 0.7rem;
+            cursor: pointer;
+            text-align: center;
+            margin-right: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Player Details</h1>
+        <div class="player-info">
+            <h2><%= player.name %></h2>
+            <div class="stats">
+                <div class="category">
+                    <h3>Batting</h3>
+                    <p>Runs: <%= player.batting.runs %></p>
+                    <p>Balls Faced: <%= player.batting.ballsfaced %></p>
+                    <p>Matches: <%= player.batting.matches %></p>
+                    <p>Fours: <%= player.batting.fours %></p>
+                    <p>Sixes: <%= player.batting.sixes %></p>
+                    <p>Strike Rate: <%= player.batting.strikeRate %></p>
+                    <p>Average: <%= player.batting.average %></p>
+                    <p>Half Centuries: <%= player.batting.halfcenturies %></p>
+                    <p>Centuries: <%= player.batting.centuries %></p>
+                </div>
+                <div class="category">
+                    <h3>Bowling</h3>
+                    <p>Balls: <%= player.bowling.balls %></p>
+                    <p>Wickets: <%= player.bowling.wickets %></p>
+                    <p>Overs: <%= player.bowling.overs %></p>
+                    <p>Maidens: <%= player.bowling.maidens %></p>
+                    <p>Runs: <%= player.bowling.runs %></p>
+                    <p>Wides: <%= player.bowling.wides %></p>
+                    <p>No Balls: <%= player.bowling.noballs %></p>
+                    <p>Economy: <%= player.bowling.economy %></p>
+                </div>
+            </div>
+        </div>
+        <a href="/players">
+            <button class="button">
+                Back
+            </button>
+        </a>
+    </div>
+</body>
+</html>

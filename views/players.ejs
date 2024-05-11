@@ -1,0 +1,116 @@
+<!-- players.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .player-list {
+            margin-top: 20px;
+            list-style-type: none;
+            padding: 0;
+            
+        }
+        .player-item {
+            display: flex;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Horizontal offset, vertical offset, blur radius, spread radius, color */
+            align-items: center;
+            margin-top: 9px;
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+            position: relative; /* Added position relative for positioning the pinkish-red div */
+        }
+      
+        .player-item .player-info {
+            flex: 1;
+        }
+        .player-item .player-name {
+            font-weight: bold;
+            font-size: large;
+            margin-bottom: 5px;
+        }
+        .player-item .player-stats {
+            color: #888;
+        }
+        .player-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px; /* Adjust the height as needed */
+            background-color:  rgb(244, 29, 111); /* Pinkish-red background color */
+            border-radius: 0 0 5px 5px; /* Rounded corners for the div */
+        }
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        .button {
+            margin-top: 7vh;
+            margin-left: 30vw;
+            color: #fff; /* White text color */
+            background-color: #e73a5f; /* Pinkish-red background */
+            font-weight: 500;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            line-height: 2rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            padding-top: 0.7rem;
+            padding-bottom: 0.7rem;
+            cursor: pointer;
+            text-align: center;
+            margin-right: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color: rgb(244, 29, 111);">Players List</h1>
+        <ul class="player-list">
+            <% players.forEach(player => { %>
+                <li class="player-item">
+                    <a href="/player/<%= player._id %>">
+                    <div class="player-info">
+                        <div class="player-name"><%= player.name %></div>
+                        <div class="player-stats">
+                            Runs: <%= player.batting.runs %>, 
+                            Wickets: <%= player.bowling.wickets %>, 
+                            Matches: <%= player.batting.matches %>
+                        </div>
+                    </div>
+                    </a>
+                </li>
+            <% }); %>
+        </ul>
+        <a href="/">
+            <button class="button">
+                Back
+            </button>
+        </a>
+    </div>
+</body>
+</html>

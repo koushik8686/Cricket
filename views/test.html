@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    /* General styles */
+body {
+  font-family: sans-serif;  /* Set a basic font family */
+  margin: 0;               /* Remove default browser margins */
+  padding: 0;              /* Remove default browser padding */
+  background-color: #f8f9fa;  /* Light gray background */
+}
+
+/* Container styles */
+.container {
+  display: flex;           /* Arrange buttons horizontally */
+  flex-wrap: wrap;          /* Wrap buttons onto next line if needed */
+  justify-content: center;  /* Center buttons horizontally */
+  margin: 20px auto;       /* Add some margin for better spacing */
+}
+
+/* Button styles */
+.button {
+  margin: 10px;            /* Add space between buttons */
+  background-color: #186F65;  /* Blue background */
+  padding: 15px 30px;      /* Add padding for text */
+  height: 60px;            /* Button height */
+  border-radius: 10px;       /* Rounded corners */
+  text-decoration: none;   /* Remove underline from links */
+  color: #fff;             /* White text color */
+  text-align: center; 
+  display: flex;
+  justify-content: center;
+  align-items: center;     /* Center text within buttons */
+  transition: background-color 0.3s ease;  /* Smooth hover effect */
+}
+a{
+    text-decoration: none;
+}
+/* Button hover effect (optional) */
+.button:hover {
+  background-color: #0056b3;  /* Darker blue background on hover */
+}
+
+/* Media query for smaller screens (adjust breakpoint as needed) */
+@media (max-width: 600px) {
+  .button {
+    width: 100%;  /* Make buttons full width on smaller screens */
+  }
+}
+
+</style>
+<body>
+    <h1 style="text-align: center;" >CRICKET</h1>
+    <div class="container">
+        <div class="button">
+          <a href="/addplayers">  Add New Player </a>
+        </div>
+        <div class="button">
+          <a href="/addplayers">  Players </a>
+        </div>
+        <div class="button">
+          <a href="/addplayers">  New Match </a>
+        </div>
+        <div class="button">
+          <a href="/addplayers">  Matches </a>
+        </div>
+    </div>
+</body>
+</html>
