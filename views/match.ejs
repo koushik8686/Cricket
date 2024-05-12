@@ -3,9 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAtch</title>
+    <title>Match</title>
+    <style>
+        body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 20px;
+      display: flex; /* Flexbox for better layout */
+      flex-direction: column; /* Stack elements vertically */
+    }
+
+    .stats,
+    .select-bowler {
+      flex: 1; /* Make stats and select-bowler sections take up equal space */
+      padding: 1rem; /* Use rem unit for better responsiveness */
+      border-radius: 5px; /* Consistent border radius */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .stats p {
+      margin: 5px 0;
+    }
+
+    .stats hr {
+      margin: 1rem 0; /* Use rem unit for margin */
+    }
+
+    .select-bowler select {
+      margin-top: 10px;
+      padding: 0.5rem; /* Use rem unit for padding */
+      width: 100%;
+      border: 1px solid #ccc; /* Consistent border style */
+      border-radius: 5px;
+    }
+
+    .select-bowler button {
+      margin-top: 10px;
+      padding: 0.8rem 1.6rem; /* Use rem unit for padding */
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      display: flex;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+   .bat-bowl{
+    display: flex;
+    justify-content: space-between;
+   }
+    /* Popup styles */
+    .popup {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 9999;
+      display: none;
+    }
+
+    .popup label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .popup input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    .popup button {
+      display: block;
+      margin-top: 10px;
+      padding: 0.8rem 1.6rem; /* Use rem unit for padding */
+      background-color: #e73a5f;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .main{
+        margin-top: 10px;
+      padding: 0.5rem; /* Use rem unit for padding */
+      width: 100%;
+      border: 1px solid #ccc; /* Consistent border style */
+      border-radius: 5px;
+    }
+    .main {
+            display: flex;
+            gap: 10px;
+        }
+
+        .circular-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #3498db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .circular-button:hover {
+            background-color: #2980b9;
+        }
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .popup label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .popup select {
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .popup button {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+  </style>
+    </style>
 </head>
-<body>
-    
+<body onload="showPopup()">
+    <div class="container">
+        <% if (match.team1_player_batting_stats.length === 0) { %>
+        <div class="popup" id="popup">
+                <h2>Choose Openers</h2>
+                <form action="/match/<%= match._id %>/openers1" method="post">
+                    <% match.team1.forEach(player => { %>
+                        <label>
+                            <input type="checkbox" name="openers" value="<%= player.playerid %>">
+                            <%= player.playername %>
+                        </label>
+                    <% }); %>
+                    <button type="submit">Submit</button>
+                </form>
+        </div>
+        <% } %>
+       
+        <div class="stats">
+            <p>Total Overs: <%= match.overs %></p>
+            <p>Score: <%= match.team1_runs %>/<%= match.team1_wickets %> <span>   </span> (<%= match.team1_overs %>)</p>
+<hr>
+     <div class="bat-bowl">
+        <div class="bat">
+            <p>Current Batters:</p>
+            <% if (match.currentbatters.length!=0) { %>
+                <p><%= match.currentbatters[0].name %> <span>  </span>  <%= match.currentbatters[0].runs %>(<%= match.currentbatters[0].balls %>)</p>
+                <p><%= match.currentbatters[1].name %> <span>  </span>  <%= match.currentbatters[1].runs %>(<%= match.currentbatters[1].balls %>)</p>
+            <% } %>
+        </div>
+        <div class="bowl">
+            <p>Current Bowler:</p>
+            <p><%= match.currentbowler.name %> <span>   </span> <%= match.currentbowler.wickets %>-<%= match.currentbowler.runs %> (<%= match.currentbowler.overs %>)</p>
+   </div>
+        </div>
+        </div>
+
+        <div class="select-bowler">
+            Bowler :
+            <form style="display: flex;" action="/match/<%= match._id %>/selectbowler" method="post">
+                <select name="bowler">
+                    <% match.team2.forEach(player => { %>
+                        <option value="<%= player.playerid %>"><%= player.playername %></option>
+                    <% }); %>
+                </select>
+                <button type="submit">OK</button>
+            </form>
+        </div>
+
+        <div class="main">
+            <div class="circular-button">0</div>
+            <div class="circular-button">1</div>
+            <div class="circular-button">2</div>
+            <div class="circular-button">3</div>
+            <div class="circular-button">4</div>
+            <div class="circular-button">6</div>
+            <div class="circular-button"   id="wdButton" >WD</div>
+            <div class="circular-button"  id="nbButton" >NB</div>
+        </div>
+        <div class="popup-overlay" id="popupOverlay">
+            <div class="popup" id="extrasPopup">
+                <h2>Select Extras</h2>
+                <form id="extrasForm">
+                    <label for="extrasSelect">Select Extras:</label>
+                    <select name="extras" id="extrasSelect">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                    </select>
+                    <button type="button" onclick="submitExtras()">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'block';
+        }
+        function showExtrasPopup() {
+            const popupOverlay = document.getElementById('popupOverlay');
+            const extrasPopup = document.getElementById('extrasPopup');
+            popupOverlay.style.display = 'flex';
+            extrasPopup.style.display = 'block';
+        }
+
+        // Function to submit the selected extras
+        function submitExtras() {
+            const extrasForm = document.getElementById('extrasForm');
+            const selectedExtras = extrasForm.elements['extras'].value;
+            console.log('Selected Extras:', selectedExtras);
+            // You can perform further actions here, such as sending the selected extras to the server
+            // For demonstration purposes, we'll hide the popup after submission
+            hideExtrasPopup();
+        }
+
+        // Function to hide the extras popup
+        function hideExtrasPopup() {
+            const popupOverlay = document.getElementById('popupOverlay');
+            const extrasPopup = document.getElementById('extrasPopup');
+            popupOverlay.style.display = 'none';
+            extrasPopup.style.display = 'none';
+        }
+
+        // Event listeners for WD and NB buttons to show the extras popup
+        const wdButton = document.getElementById('wdButton');
+        const nbButton = document.getElementById('nbButton');
+        wdButton.addEventListener('click', showExtrasPopup);
+        nbButton.addEventListener('click', showExtrasPopup);
+
+    </script>
 </body>
 </html>

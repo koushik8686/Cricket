@@ -90,7 +90,7 @@
         <form action="/creatematch" method="post">
             <label for="overs">Number of Overs:</label>
             <input type="number" id="overs" name="overs" min="1" required>
-
+            <p>Team 1 will be batting first</p>
             <div class="team-container">
                 <div>
                     <label for="team1">Team 1:</label>
@@ -111,13 +111,9 @@
                     <% } %>
                 </div>
             </div>
-
-            <label for="firstBatting">First Batting:</label>
-            <select id="firstBatting" name="firstBatting" required>
-                <option value="team1">Team 1</option>
-                <option value="team2">Team 2</option>
-            </select>
-
+        
+          
+        
             <input type="submit" value="Create Match">
         </form>
     </div>
