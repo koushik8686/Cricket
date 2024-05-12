@@ -12,7 +12,8 @@ const {playermodel} = require("./models")
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 mongoose.connect(process.env.URL);
-
+const jsonParser = bodyParser.json();
+app.use(jsonParser); // use it globally
 
 app.get("/addplayers" , function(req , res){
     playermodel.find().then((arr)=>{
@@ -106,7 +107,7 @@ app.get("/creatematch" ,  function (req , res) {
 
 app.get("/match/:id" , function (req , res) { 
     Match.findById(req.params.id).then((match)=>{
-        console.log(match);
+        // console.log(match);
         res.render("match" , {match:match})
     })
  })
@@ -145,6 +146,29 @@ app.get("/match/:id" , function (req , res) {
             out_type: " ",
             bowler_name: " ",
             assist: " "
+        });
+
+        const o3 = await playermodel.findById(req.body.bowler);
+        match.currentbowler={
+            name:o3.name,
+            runs:0,
+            id:req.body.bowler,
+            balls:0,
+            fours:0,
+            sixes:0,
+            overs:0,
+            wickets:0, 
+        }
+        match.team2_player_bowling_stats.push({
+            name: o3.name,
+            id: req.body.bowler,
+            runs: 0,
+            balls: 0,
+            fours:0,
+        sixes:0,
+        overs:0,
+        wickets:0,
+        econony:0
         });
 
         match.currentbatters = [
@@ -195,5 +219,54 @@ app.post("/match/:id/selectbowler", function (req , res) {
 app.get("/" , function (req , res) { 
     res.render("home")
  })
+
+ app.post('/match/:matchId/ball', async (req, res) => {
+    const matchId = req.params.matchId;
+    const value = Number(req.body.value);
+    console.log(value);
+    Match.findById(matchId).then(async (match) => {
+        match.team1_runs+=Number(value)
+        console.log(match.team1_overs);
+        if (match.team1_overs==0.2) {
+            match.team1_overs=0.3
+        } 
+       else if (match.team1_overs%0.5==0 && match.team1_overs!=0 && match.team1_overs%1!=0) {
+            match.team1_overs+=0.5
+            const tempBatter = match.currentbatters[0];
+            match.currentbatters[0] = match.currentbatters[1];
+            match.currentbatters[1] = tempBatter;
+        } else{
+            match.team1_overs+=0.1
+        }
+       var id =  match.currentbatters[0].id
+       var id1 =  match.currentbowler.id
+        match.currentbatters[0].balls += 1
+        match.currentbatters[0].runs += value; // Increase runs for current bowler
+        match.currentbowler.runs += value; // Increase runs for current bowler
+        match.currentbowler.balls += 1
+        match.team1_player_batting_stats.forEach(player => {
+            if (player.id === id) {
+                player.runs += value; // Increase runs for the player with the matching ID
+                player.balls += 1; // Increase balls for the player with the matching ID
+            }
+        });
+        match.team2_player_bowling_stats.forEach(player => {
+            if (player.id === id1) {
+                player.runs += value; // Increase runs for the player with the matching ID
+                player.balls += 1; // Increase balls for the player with the matching ID
+            }
+        });
+        if (value==1 || value==3) {
+            const tempBatter = match.currentbatters[0];
+            match.currentbatters[0] = match.currentbatters[1];
+            match.currentbatters[1] = tempBatter;
+        }
+       await match.save()
+    })
+
+    // res.redirect("/match/"+req.params.matchId);
+ await res.send("hlo")
+});
+
 
  app.listen(3000 )

@@ -87,6 +87,8 @@
 .popup {
   background-color: #ffe6e6; /* light reddish background */
   padding: 20px;
+  margin-top: 40vh;
+  margin-bottom: 40vh;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: none;
@@ -213,6 +215,11 @@
                             <%= player.playername %>
                         </label>
                     <% }); %>
+                    <select name="bowler">
+                        <% match.team2.forEach(player => { %>
+                            <option value="<%= player.playerid %>"><%= player.playername %></option>
+                        <% }); %>
+                    </select>
                     <button type="submit">Submit</button>
                 </form>
         </div>
@@ -250,15 +257,16 @@
         </div>
         
         <div class="main">
-            <div class="circular-button">0</div>
-            <div class="circular-button">1</div>
-            <div class="circular-button">2</div>
-            <div class="circular-button">3</div>
-            <div class="circular-button">4</div>
-            <div class="circular-button">6</div>
-            <div class="circular-button" id="wdButton">WD</div>
-            <div class="circular-button" id="nbButton">NB</div>
+            <div class="circular-button" onclick="sendDataToServer(0)">0</div>
+            <div class="circular-button" onclick="sendDataToServer(1)">1</div>
+            <div class="circular-button" onclick="sendDataToServer(2)">2</div>
+            <div class="circular-button" onclick="sendDataToServer(3)">3</div>
+            <div class="circular-button" onclick="sendDataToServer(4)">4</div>
+            <div class="circular-button" onclick="sendDataToServer(6)">6</div>
+            <div class="circular-button" id="wdButton" onclick="sendDataToServer('WD')">WD</div>
+            <div class="circular-button" id="nbButton" onclick="sendDataToServer('NB')">NB</div>
         </div>
+        
         
         <div class="popup-overlay" id="popupOverlay">
             <div class="popup" id="extrasPopup">
@@ -303,65 +311,87 @@
     </div>
 
     <script>
-    function showPopup() {
-        const popup = document.getElementById('popup');
-        popup.style.display = 'block';
-    }
+      
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'block';
+        }
+    
+        function showExtrasPopup() {
+            const popupOverlay = document.getElementById('popupOverlay');
+            const extrasPopup = document.getElementById('extrasPopup');
+            popupOverlay.style.display = 'flex';
+            extrasPopup.style.display = 'block';
+        }
+    
+        function submitExtras() {
+            const extrasForm = document.getElementById('extrasForm');
+            const selectedExtras = extrasForm.elements['extras'].value;
+            console.log('Selected Extras:', selectedExtras);
+            // You can perform further actions here, such as sending the selected extras to the server
+            // For demonstration purposes, we'll hide the popup after submission
+            hideExtrasPopup();
+        }
+    
+        // Function to hide the extras popup
+        function hideExtrasPopup() {
+            const popupOverlay = document.getElementById('popupOverlay');
+            const extrasPopup = document.getElementById('extrasPopup');
+            popupOverlay.style.display = 'none';
+            extrasPopup.style.display = 'none';
+        }
+    
+        function showwicketsPopup() {
+            const popupOverlay = document.getElementById('wktpopupOverlay');
+            const extrasPopup = document.getElementById('wiketsPopup');
+            popupOverlay.style.display = 'flex';
+            extrasPopup.style.display = 'block';
+        }
+    
+        // Function to submit the selected batsman
+        function submitbatsman() {
+            const extrasForm = document.getElementById('wicketsForm');
+            const selectedbatsman = extrasForm.elements['nextbatsman'].value;
+            console.log('Selected Batsman:', selectedbatsman);
+            // You can perform further actions here, such as sending the selected batsman to the server
+            // For demonstration purposes, we'll hide the popup after submission
+            hidewiketsPopup();
+        }
+    
+        // Function to hide the extras popup
+        function hidewiketsPopup() {
+            const popupOverlay = document.getElementById('wktpopupOverlay');
+            const extrasPopup = document.getElementById('wiketsPopup');
+            popupOverlay.style.display = 'none';
+            extrasPopup.style.display = 'none';
+        }
+    
+        // Event listeners for WD and NB buttons to show the extras popup
+        const wdButton = document.getElementById('wdButton');
+        const nbButton = document.getElementById('nbButton');
+        wdButton.addEventListener('click', showExtrasPopup);
+        nbButton.addEventListener('click', showExtrasPopup);
+    
+        // Function to send data to the server
+        function sendDataToServer(value) {
+    axios.post(`/match/<%= match.id %>/ball`, { value: value })
+        .then(response => {
+            console.log('Data sent successfully:', value);
+            // Handle response if needed
 
-    function showExtrasPopup() {
-        const popupOverlay = document.getElementById('popupOverlay');
-        const extrasPopup = document.getElementById('extrasPopup');
-        popupOverlay.style.display = 'flex';
-        extrasPopup.style.display = 'block';
-    }
+            // Reload the page after receiving a response
+setTimeout(() => {
+    window.location.reload();
+}, 400);
+        })
+        .catch(error => {
+            console.error('Error sending data:', error);
+            // Handle error
+        });
+}
 
-    function submitExtras() {
-        const extrasForm = document.getElementById('extrasForm');
-        const selectedExtras = extrasForm.elements['extras'].value;
-        console.log('Selected Extras:', selectedExtras);
-        // You can perform further actions here, such as sending the selected extras to the server
-        // For demonstration purposes, we'll hide the popup after submission
-        hideExtrasPopup();
-    }
-
-    // Function to hide the extras popup
-    function hideExtrasPopup() {
-        const popupOverlay = document.getElementById('popupOverlay');
-        const extrasPopup = document.getElementById('extrasPopup');
-        popupOverlay.style.display = 'none';
-        extrasPopup.style.display = 'none';
-    }
-
-    function showwicketsPopup() {
-        const popupOverlay = document.getElementById('wktpopupOverlay');
-        const extrasPopup = document.getElementById('wiketsPopup');
-        popupOverlay.style.display = 'flex';
-        extrasPopup.style.display = 'block';
-    }
-
-    // Function to submit the selected batsman
-    function submitbatsman() {
-        const extrasForm = document.getElementById('wicketsForm');
-        const selectedbatsman = extrasForm.elements['nextbatsman'].value;
-        console.log('Selected Batsman:', selectedbatsman);
-        // You can perform further actions here, such as sending the selected batsman to the server
-        // For demonstration purposes, we'll hide the popup after submission
-        hidewiketsPopup();
-    }
-
-    // Function to hide the extras popup
-    function hidewiketsPopup() {
-        const popupOverlay = document.getElementById('wktpopupOverlay');
-        const extrasPopup = document.getElementById('wiketsPopup');
-        popupOverlay.style.display = 'none';
-        extrasPopup.style.display = 'none';
-    }
-
-    // Event listeners for WD and NB buttons to show the extras popup
-    const wdButton = document.getElementById('wdButton');
-    const nbButton = document.getElementById('nbButton');
-    wdButton.addEventListener('click', showExtrasPopup);
-    nbButton.addEventListener('click', showExtrasPopup);
-</script>
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- <script src="/a.js"></script> -->
 </body>
 </html>

@@ -74,12 +74,12 @@ const matchschema =  mongoose.Schema({
         default: Date.now
     },
     team1_overs_total:[{
-        over_no:String,
+        over_no:Number,
         ballno:String,
         runs:String
     }],
     team2_overs_total:[{
-        over_no:String,
+        over_no:Number,
         ballno:String,
         runs:String
     }] , 
