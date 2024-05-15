@@ -275,6 +275,7 @@ app.get("/" , function (req , res) {
     const matchId = req.params.matchId;
     const value = Number(req.body.value);
     Match.findById(matchId).then(async (match) => {
+        console.log(match);
         if (value==-1) {
             const tempBatter = match.currentbatters[0];
             match.currentbatters[0] = match.currentbatters[1];
@@ -285,9 +286,10 @@ app.get("/" , function (req , res) {
             match.team1_runs+=Number(value)
         if (match.team1_overs % 0.5 === 0 && match.team1_overs % 1 !== 0) {
             match.team1_overs += 0.5; // Increment by 0.1
+            if (match.currentbatters[1].runs) {
             const tempBatter = match.currentbatters[0];
             match.currentbatters[0] = match.currentbatters[1];
-            match.currentbatters[1] = tempBatter;
+            match.currentbatters[1] = tempBatter; }
         } else {
             match.team1_overs = parseFloat((match.team1_overs + 0.1).toFixed(1)); // Increment by 0.1 and round to one decimal place
         }
@@ -299,6 +301,7 @@ app.get("/" , function (req , res) {
         
        var id =  match.currentbatters[0].id
        var id1 =  match.currentbowler.id
+       console.log(match.currentbatters);
         match.currentbatters[0].balls += 1
         match.currentbatters[0].runs += value; // Increase runs for current bowler
         match.currentbowler.runs += value; // Increase runs for current bowler
@@ -317,7 +320,7 @@ app.get("/" , function (req , res) {
             }
         });
         if (value==1 || value==3) {
-            if (match.currentbatters[1]!={}) {
+            if (match.currentbatters[1].runs) {
                 const tempBatter = match.currentbatters[0];
                 match.currentbatters[0] = match.currentbatters[1];
                 match.currentbatters[1] = tempBatter;
@@ -342,8 +345,6 @@ res.send("hlo")
  app.post("/match/:matchId/wicket", function (req, res) {
     console.log(req.body);
     Match.findById(req.params.matchId).then(async function (match) {
-
-
         if (match.team1_overs % 0.5 === 0 && match.team1_overs % 1 !== 0) {
             match.team1_overs += 0.5; // Increment by 0.1
             const tempBatter = match.currentbatters[0];
@@ -359,10 +360,8 @@ res.send("hlo")
         }
         if (req.body.type == "bowled") {
             match.team1_wickets += 1;
-
             const currentBatterId = match.currentbatters[0].id;
             const currentBatterStats = match.team1_player_batting_stats.find(player => player.id === currentBatterId);
-
             currentBatterStats.runs = match.currentbatters[0].runs;
             currentBatterStats.balls = match.currentbatters[0].balls;
             currentBatterStats.fours = match.currentbatters[0].fours;
@@ -584,6 +583,19 @@ app.get("/match/:match/innings1", async (req, res) => {
         match.team2_player_bowling_stats.forEach(player => {
             player.economy= (player.runs/player.balls *6)
         });
+        match.currentbatters.forEach(currentBatter => {
+            if (currentBatter.runs) {
+                let playerStats = match.team1_player_batting_stats.find(player => player.id === currentBatter.id);
+                if (playerStats) {
+                    playerStats.runs = currentBatter.runs;
+                    playerStats.balls = currentBatter.balls;
+                    playerStats.fours = currentBatter.fours;
+                    playerStats.sixes = currentBatter.sixes;
+                    playerStats.strike_rate = (currentBatter.balls > 0) ? (currentBatter.runs / currentBatter.balls) * 100 : 0;
+                }    
+      }        
+        });
+        match.save()
 res.render("innings1", {match})
     })
 })
