@@ -585,6 +585,7 @@ app.get("/match/:match/innings1", async (req, res) => {
         });
         match.currentbatters.forEach(currentBatter => {
             if (currentBatter.runs) {
+                console.log(currentBatter);
                 let playerStats = match.team1_player_batting_stats.find(player => player.id === currentBatter.id);
                 if (playerStats) {
                     playerStats.runs = currentBatter.runs;
