@@ -67,6 +67,7 @@ const matchschema =  mongoose.Schema({
         wickets:Number,
         econony:Number
     }],
+    
     t1:[playerschema],
     t2:[playerschema],
     date: {

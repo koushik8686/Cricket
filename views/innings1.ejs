@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team 1 Stats</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #007bff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        .scoreboard {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .scoreboard div {
+            font-size: 1.2em;
+        }
+        @media (max-width: 500px) {
+            body {
+                padding: 10px;
+            }
+            th, td {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+            .back-button {
+                padding: 8px 16px;
+                font-size: 0.9em;
+            }
+            .scoreboard div {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/match/<%= match._id %>" class="back-button">Back</a>
+    <h1>Team 1 Stats</h1>
+
+    <div class="scoreboard">
+        <div><strong>Score:</strong> <%= match.team1_runs %>/<%= match.team1_wickets %></div>
+        <div><strong>Overs:</strong> <%= match.team1_overs %></div>
+    </div>
+
+    <h2>Batting Stats</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Runs</th>
+                <th>Balls</th>
+                <th>Fours</th>
+                <th>Sixes</th>
+                <th>Strike Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% match.team1_player_batting_stats.forEach(function(player) { %>
+                <tr>
+                    <td>
+                        <%= player.name %>
+                        <div style="font-size: 0.8em; color: #555;">
+                            <%= player.out_type %>
+                            <% if (player.out_type === 'run out') { %>
+                                (<%= player.assist %>)
+                            <% } else if (player.out_type === 'bowled') { %>
+                                (<%= player.bowler_name %>)
+                            <% } else if (player.out_type === 'caught') { %>
+                                (<%= player.bowler_name %> / <%= player.assist %>)
+                            <% } %>
+                        </div>
+                    </td>
+                    <td><%= player.runs %></td>
+                    <td><%= player.balls %></td>
+                    <td><%= player.fours %></td>
+                    <td><%= player.sixes %></td>
+                    <td><%= player.strike_rate %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <h2>Bowling Stats</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Runs</th>
+                <th>Balls</th>
+                <th>Overs</th>
+                <th>Wickets</th>
+                <th>Economy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% match.team2_player_bowling_stats.forEach(function(player) { %>
+                <tr>
+                    <td><%= player.name %></td>
+                    <td><%= player.runs %></td>
+                    <td><%= player.balls %></td>
+                    <td><%= player.overs %></td>
+                    <td><%= player.wickets %></td>
+                    <td><%= player.econony %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+</body>
+</html>

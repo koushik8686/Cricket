@@ -107,10 +107,11 @@
 
 <h1>Add Player</h1>
 <form action="/addplayers" method="post">
-    <input type="text" name="name" placeholder="Playername">
+    <input required type="text" name="name" placeholder="Playername">
     <button type="submit">Add</button>
-    <a  href="/"><button>Back</button></a>
 </form>
+<a  href="/"><button>Back</button></a>
+
 <h2>Players</h2>
 
 <% for (let i = 0; i < players.length; i++) { %>

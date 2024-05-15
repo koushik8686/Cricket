@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 
 const playerschema = mongoose.Schema({
     name:String,
-    matches:String,
-    catches:String,
+    matches:Number,
+    catches:Number,
+    runouts:Number,
     batting:{
     runs:Number,
     ballsfaced:Number,
@@ -23,7 +24,7 @@ const playerschema = mongoose.Schema({
      wides:Number,
      noballs:Number,
      economy:Number,
-    }
+    },
 })
 
 const playermodel = mongoose.model("players",playerschema); 

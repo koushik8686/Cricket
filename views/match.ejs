@@ -25,6 +25,7 @@
 .stats,
 .select-bowler {
   flex: 1;
+  margin-top: 10px;
   padding: 1rem;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -118,20 +119,22 @@
 .main {
   margin-top: 10px;
   padding: 0.5rem;
-  width: 100%;
   border: 1px solid #e6b8b8; /* reddish border */
   border-radius: 5px;
   background-color: whitesmoke; /* light reddish background */
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
+  width: 70%;
 }
 
 .circular-button {
-  width: 50px;
-  height: 50px;
+  width: 20%;
+  height: 42%;
   border-radius: 50%;
   background-color: #e73a5f; /* reddish button */
   display: flex;
+  border: double #e73a5f;
   justify-content: center;
   align-items: center;
   color: #fff;
@@ -149,8 +152,8 @@
   }
 
   .circular-button {
-    width: 40px;
-    height: 40px;
+    width: 19%;
+    height: 47px;
     font-size: 0.8rem;
   }
 }
@@ -162,13 +165,27 @@
   color: #fff;
   border: none;
   border-radius: 5px;
-  margin-left: 30vw;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  width: 100px;
 }
-
+.retire-button{
+  margin-top: 10px;
+  padding: 0.8rem 1.6rem;
+  background-color: #fff;
+  color: #e73a5f;
+  border:  double #e73a5f;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 170px;
+}
 .wicket-popup {
   position: absolute;
   top: 100%;
@@ -189,7 +206,28 @@
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
+.wicket{
+  width: 30%;
+}
+.bottom{
+  width: 100%;
+  display: flex;
+  gap: 5px;
+}
+.innings-button{
+  margin-top: 10px;
+  padding: 0.8rem 1.6rem;
+  background-color: #e73a5f;
+  color: #fff;
+  border:  double #e73a5f;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 340px;
+}
 /* Make the select and options of popup larger for mobile */
 @media (max-width: 500px) {
   .wicket-popup select {
@@ -201,6 +239,7 @@
     font-size: 1.2rem;
   }
 }
+
   </style>
 </head>
 <body onload="showPopup()">
@@ -233,41 +272,55 @@
         <div class="bat">
             <p>Current Batters:</p>
             <% if (match.currentbatters.length!=0) { %>
-                <p><%= match.currentbatters[0].name %> <span>  </span>  <%= match.currentbatters[0].runs %>(<%= match.currentbatters[0].balls %>)</p>
+                <p><%= match.currentbatters[0].name %> <span>  </span>  <%= match.currentbatters[0].runs %>(<%= match.currentbatters[0].balls %>)  🏏</p>
                 <p><%= match.currentbatters[1].name %> <span>  </span>  <%= match.currentbatters[1].runs %>(<%= match.currentbatters[1].balls %>)</p>
             <% } %>
         </div>
         <div class="bowl">
             <p>Current Bowler:</p>
-            <p><%= match.currentbowler.name %> <span>   </span> <%= match.currentbowler.wickets %>-<%= match.currentbowler.runs %> (<%= match.currentbowler.overs %>)</p>
-   </div>
+            <p> ⚾ <%= match.currentbowler.name %> <span>   </span> <%= match.currentbowler.wickets %>-<%= match.currentbowler.runs %> (<%= match.currentbowler.overs %>)</p>
         </div>
         </div>
+        </div>
+       <div class="bowlingpopup">
 
+       </div>
         <div class="select-bowler">
             Bowler :
-            <form style="display: flex;" action="/match/<%= match._id %>/selectbowler" method="post">
-                <select name="bowler">
-                    <% match.team2.forEach(player => { %>
-                        <option value="<%= player.playerid %>"><%= player.playername %></option>
-                    <% }); %>
-                </select>
-                <button type="submit">OK</button>
-            </form>
+            <form style="display: flex;" id="bowlerForm">
+              <select name="bowler" onchange="sendchangebowlerData(this.value)">
+                <option value="">Select Bowler</option>
+                  <% match.team2.forEach(player => { %>
+                      <option value="<%= player.playerid %>"><%= player.playername %></option>
+                  <% }); %>
+              </select>
+          </form>
         </div>
+        <div class="bottom">
+       
+        <div class="wickets">
+          <button id="wicket-Button" class="wicket-button" onclick="showwicketsPopup()">
+              Bowled
+          </button>
+          <button id="runout-Button" class="wicket-button" onclick="showRunOutPopup()">
+              Run out
+          </button>
+          <button id="wicket-Button" class="wicket-button" onclick="showCatchPopup()">
+              Catch
+          </button>
+      </div>
+      <div class="main">
+        <div class="circular-button" onclick="sendDataToServer(0)">0</div>
+        <div class="circular-button" onclick="sendDataToServer(1)">1</div>
+        <div class="circular-button" onclick="sendDataToServer(2)">2</div>
+        <div class="circular-button" onclick="sendDataToServer(3)">3</div>
+        <div class="circular-button" onclick="sendDataToServer(4)">4</div>
+        <div class="circular-button" onclick="sendDataToServer(6)">6</div>
+        <div class="circular-button" id="wdButton" onclick="extra('wd')">WD</div>
+        <div class="circular-button" id="nbButton" onclick="extra('nb')">NB</div>
         
-        <div class="main">
-            <div class="circular-button" onclick="sendDataToServer(0)">0</div>
-            <div class="circular-button" onclick="sendDataToServer(1)">1</div>
-            <div class="circular-button" onclick="sendDataToServer(2)">2</div>
-            <div class="circular-button" onclick="sendDataToServer(3)">3</div>
-            <div class="circular-button" onclick="sendDataToServer(4)">4</div>
-            <div class="circular-button" onclick="sendDataToServer(6)">6</div>
-            <div class="circular-button" id="wdButton" onclick="sendDataToServer('WD')">WD</div>
-            <div class="circular-button" id="nbButton" onclick="sendDataToServer('NB')">NB</div>
-        </div>
-        
-        
+    </div>
+      </div>
         <div class="popup-overlay" id="popupOverlay">
             <div class="popup" id="extrasPopup">
                 <h2>Select Extras</h2>
@@ -285,29 +338,131 @@
                 </form>
             </div>
         </div>
-        
         <div class="popup-overlay" id="wktpopupOverlay">
-            <div class="popup" id="wiketsPopup">
-                <h2>Select next batsman</h2>
-                <form id="wicketsForm">
-                    <label for="nextbatsmanSelect">Select Next Batsman:</label>
+          <div class="popup" id="wiketsPopup">
+              <h2>Select next batsman</h2>
+              <form id="wicketsForm">
+                  <label for="nextbatsmanSelect">Select Next Batsman:</label>
+                  <% if (match.team1_wickets < match.team1.length-2) { %>
                     <select name="nextbatsman" id="nextbatsmanSelect">
+                        <option value="" disabled selected>Choose Next Batsman</option>
                         <% match.team1.forEach(player => { %>
-                            <% if (!match.team1_player_batting_stats.some(stat => stat.id === player.playerid)) { %>
+                            <% const isNotInBattingStats = !match.team1_player_batting_stats.some(stat => stat.id === player.playerid); %>
+                            <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
+                            <% if (isNotInBattingStats && isNotCurrentBatter) { %>
                                 <option value="<%= player.playerid %>"><%= player.playername %></option>
                             <% } %>
                         <% }); %>
                     </select>
-                    <button type="button" onclick="submitbatsman()">Submit</button>
-                </form>
-            </div>
+                <% } %>
+                  <button type="button" onclick="submitbatsman('<%= match.id %>')">Submit</button>
+              </form>
+          </div>
+      </div>
+      
+        <div class="popup-overlay" id="runoutPopupOverlay" style="display: none;">
+          <div class="popup" id="runoutPopup" style="display: none;">
+              <h2>Run Out Batsman</h2>
+              <form id="runoutForm">
+                <p>Run Out By</p>
+                <select name="runoutassist" id="runoutassist">
+                    <option value="" disabled selected>Choose Run Out By</option>
+                    <% match.team2.forEach(player => { %>
+                        <option value="<%= player.playerid %>"><%= player.playername %></option>
+                    <% }); %>
+                </select>
+                <p>Next Batsman</p>
+                <label for="nextbatsmanSelect">Select Next Batsman:</label>
+                <% if (match.team1_wickets < match.team1.length - 2) { %>
+                    <select name="nextbatsman" id="nextbatsmanSelect">
+                        <option value="" disabled selected>Choose Next Batsman</option>
+                        <% match.team1.forEach(player => { %>
+                            <% const isNotInBattingStats = !match.team1_player_batting_stats.some(stat => stat.id === player.playerid); %>
+                            <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
+                            <% if (isNotInBattingStats && isNotCurrentBatter) { %>
+                                <option value="<%= player.playerid %>"><%= player.playername %></option>
+                            <% } %>
+                        <% }); %>
+                    </select>
+                <% } else { %>
+                    <select name="nextbatsman" id="nextbatsmanSelect">
+                        <option value="" disabled selected>No Next Batsman Available</option>
+                    </select>
+                <% } %>
+                <button type="button" onclick="submitRunOut('<%= match.id %>')">Submit</button>
+            </form>
+            
+          </div>
+      </div>
+      <div class="popup-overlay" id="catchPopupOverlay" style="display: none;">
+        <div class="popup" id="catchPopup" style="display: none;">
+            <h2>Caught Out Batsman</h2>
+            <form id="catchForm">
+                <p>Caught By</p>
+                <select name="caughtBy" id="caughtBy">
+                    <option value="" disabled selected>Choose Caught By</option>
+                    <% match.team2.forEach(player => { %>
+                        <option value="<%= player.playerid %>"><%= player.playername %></option>
+                    <% }); %>
+                </select>
+                <p>Next Batsman</p>
+                <label for="nextBatsmanSelectCatch">Select Next Batsman:</label>
+                <% if (match.team1_wickets < match.team1.length - 2) { %>
+                    <select name="nextBatsman" id="nextBatsmanSelectCatch">
+                        <option value="" disabled selected>Choose Next Batsman</option>
+                        <% match.team1.forEach(player => { %>
+                            <% const isNotInBattingStats = !match.team1_player_batting_stats.some(stat => stat.id === player.playerid); %>
+                            <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
+                            <% if (isNotInBattingStats && isNotCurrentBatter) { %>
+                                <option value="<%= player.playerid %>"><%= player.playername %></option>
+                            <% } %>
+                        <% }); %>
+                    </select>
+                <% } else { %>
+                    <select name="nextBatsman" id="nextBatsmanSelectCatch">
+                        <option value="" disabled selected>No Next Batsman Available</option>
+                    </select>
+                <% } %>
+                <button type="button" onclick="submitCatch('<%= match.id %>')">Submit</button>
+            </form>
         </div>
-        
-        <div class="wickets">
-            <button id="wicket-Button" class="wicket-button" onclick="showwicketsPopup()">
-                Wicket
-            </button>
-        </div>
+    </div>
+    
+
+    <div class="popup-overlay" id="retirePopupOverlay">
+      <div class="popup" id="retirePopup">
+          <h2>Select Next Batsman /h2>
+          <form id="retireForm">
+              <label for="retireBatsmanSelect">Select Batsman:</label>
+              <select name="retireBatsman" id="retireBatsmanSelect">
+                  <option value="" disabled selected>Choose Batsman</option>
+                  <% match.team1.forEach(player => { %>
+                      <% const isCurrentBatter = match.currentbatters.some(batter => batter.id === player.playerid); %>
+                      <% if (!isCurrentBatter) { %>
+                          <option value="<%= player.playerid %>"><%= player.playername %></option>
+                      <% } %>
+                  <% }); %>
+              </select>
+              <button type="button" onclick="submitRetire('<%= match.id %>')">Submit</button>
+          </form>
+      </div>
+  </div>
+    <div  style="display: flex; justify-content: space-around;" class="btns">
+    <button id="wicket-Button" class="retire-button " onclick="sendDataToServer(-1)">
+      Mat Runs
+  </button>
+    <button id="retire-Button" class="retire-button " onclick="showRetirePopup()">
+      Retire
+  </button>
+  </div>
+
+  <div class="innings-over">
+    <a style="text-decoration: none;" href="/match/<%= match._id %>/innings1">
+    <button class="innings-button ">
+      Innings Over
+    </button></a>
+  </div>
+
     </div>
 
     <script>
@@ -315,15 +470,14 @@
         function showPopup() {
             const popup = document.getElementById('popup');
             popup.style.display = 'block';
-        }
-    
+        }  
+       
         function showExtrasPopup() {
             const popupOverlay = document.getElementById('popupOverlay');
             const extrasPopup = document.getElementById('extrasPopup');
             popupOverlay.style.display = 'flex';
             extrasPopup.style.display = 'block';
-        }
-    
+        }  
         function submitExtras() {
             const extrasForm = document.getElementById('extrasForm');
             const selectedExtras = extrasForm.elements['extras'].value;
@@ -331,66 +485,248 @@
             // You can perform further actions here, such as sending the selected extras to the server
             // For demonstration purposes, we'll hide the popup after submission
             hideExtrasPopup();
-        }
-    
-        // Function to hide the extras popup
+        }   
         function hideExtrasPopup() {
             const popupOverlay = document.getElementById('popupOverlay');
             const extrasPopup = document.getElementById('extrasPopup');
             popupOverlay.style.display = 'none';
             extrasPopup.style.display = 'none';
-        }
-    
+        }   
+       
         function showwicketsPopup() {
             const popupOverlay = document.getElementById('wktpopupOverlay');
             const extrasPopup = document.getElementById('wiketsPopup');
-            popupOverlay.style.display = 'flex';
-            extrasPopup.style.display = 'block';
+            extrasPopup.style.display = 'block';     
+           popupOverlay.style.display = 'flex';
         }
-    
-        // Function to submit the selected batsman
-        function submitbatsman() {
-            const extrasForm = document.getElementById('wicketsForm');
-            const selectedbatsman = extrasForm.elements['nextbatsman'].value;
-            console.log('Selected Batsman:', selectedbatsman);
-            // You can perform further actions here, such as sending the selected batsman to the server
-            // For demonstration purposes, we'll hide the popup after submission
-            hidewiketsPopup();
-        }
-    
-        // Function to hide the extras popup
-        function hidewiketsPopup() {
+        function submitbatsman(matchId) {
+    const wicketsForm = document.getElementById('wicketsForm');
+    let selectedBatsman;
+
+    // Check if nextbatsman element exists in the form
+    if (!wicketsForm.elements['nextbatsman']) {
+      console.log("io");
+      selectedBatsman = "0";
+    } else {
+      selectedBatsman = wicketsForm.elements['nextbatsman'].value;
+    }
+
+    console.log(selectedBatsman);
+
+    const team1Wickets = "<%= match.team1_wickets %>";
+    const team1Length = "<%= match.team1.length %>-2";
+
+    // Check if selectedBatsman is undefined or empty
+    if (!selectedBatsman && team1Wickets !== team1Length) {
+        alert('Please select the next batsman');
+        return;
+    }
+
+    // Set selectedBatsman to "0" if it is still undefined or empty
+    if (!selectedBatsman) {
+      selectedBatsman = "0";
+    }
+
+    const data = {
+        type: "bowled",
+        nextBatsman: selectedBatsman
+    };
+
+    axios.post(`/match/${matchId}/wicket`, data)
+    .then(response => {
+        hidewiketsPopup();
+        reload();
+        // Optionally give feedback to the user
+    })
+}
+   function hidewiketsPopup() {
             const popupOverlay = document.getElementById('wktpopupOverlay');
             const extrasPopup = document.getElementById('wiketsPopup');
             popupOverlay.style.display = 'none';
             extrasPopup.style.display = 'none';
         }
-    
-        // Event listeners for WD and NB buttons to show the extras popup
+       
+        function showRunOutPopup() {
+    const popupOverlay = document.getElementById('runoutPopupOverlay');
+    const runoutPopup = document.getElementById('runoutPopup');
+    popupOverlay.style.display = 'flex';
+    runoutPopup.style.display = 'block';
+}
+        function hideRunOutPopup() {
+            const popupOverlay = document.getElementById('runoutPopupOverlay');
+            const runoutPopup = document.getElementById('runoutPopup');
+            popupOverlay.style.display = 'none';
+            runoutPopup.style.display = 'none';
+        }
+        function submitRunOut(matchId) {
+    const runoutForm = document.getElementById('runoutForm');
+    const runoutAssist = runoutForm.elements['runoutassist'].value;
+    let nextBatsman = runoutForm.elements['nextbatsman'].value;
+
+    // Set nextBatsman to "0" if it is undefined or empty
+    if (!nextBatsman) {
+        nextBatsman = "0";
+    }
+
+    if (!runoutAssist) {
+        alert('Please select "Run Out By"');
+        return;
+    }
+
+    const data = {
+        type: "runout",
+        runoutAssist,
+        nextBatsman
+    };
+
+    axios.post(`/match/${matchId}/wicket`, data)
+    .then(response => {
+        console.log('Success:', response.data);
+        hideRunOutPopup();
+        reload();
+        // Optionally give feedback to the user
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the run out. Please try again.');
+    });
+}
+        function showCatchPopup() {
+            const popupOverlay = document.getElementById('catchPopupOverlay');
+            const catchPopup = document.getElementById('catchPopup');
+            popupOverlay.style.display = 'flex';
+            catchPopup.style.display = 'block';
+        }
+        function hideCatchPopup() {
+            const popupOverlay = document.getElementById('catchPopupOverlay');
+            const catchPopup = document.getElementById('catchPopup');
+            popupOverlay.style.display = 'none';
+            catchPopup.style.display = 'none';
+        }
+        function submitCatch(matchId) {
+    const catchForm = document.getElementById('catchForm');
+    const caughtBy = catchForm.elements['caughtBy'].value;
+    let nextBatsman = catchForm.elements['nextBatsman'].value;
+
+    // Set nextBatsman to "0" if it is undefined or empty
+    if (!nextBatsman) {
+        nextBatsman = "0";
+    }
+
+    if (!caughtBy) {
+        alert('Please select who caught the ball');
+        return;
+    }
+
+    const data = {
+        type: "catch",
+        caughtBy,
+        nextBatsman
+    };
+
+    axios.post(`/match/${matchId}/wicket`, data)
+    .then(response => {
+        console.log('Success:', response.data);
+        hideCatchPopup();
+        reload();
+        // Optionally give feedback to the user
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the catch. Please try again.');
+    });
+}
+
+        function showRetirePopup() {
+        const popupOverlay = document.getElementById('retirePopupOverlay');
+        const retirePopup = document.getElementById('retirePopup');
+        retirePopup.style.display = 'block';     
+        popupOverlay.style.display = 'flex';
+    }
+
+    function submitRetire(matchId) {
+        const retireForm = document.getElementById('retireForm');
+        const selectedBatsman = retireForm.elements['retireBatsman'].value;
+
+        if (!selectedBatsman) {
+            alert('Please select the batsman to retire');
+            return;
+        }
+
+        const data = {
+            type: "retire",
+            nextbatsman: selectedBatsman
+        };
+        axios.post(`/match/${matchId}/retire`, data)
+        .then(response => {
+            console.log('Success:', response.data);
+            hideRetirePopup();
+            reload();
+            // Optionally give feedback to the user
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function hideRetirePopup() {
+        const popupOverlay = document.getElementById('retirePopupOverlay');
+        const retirePopup = document.getElementById('retirePopup');
+        popupOverlay.style.display = 'none';
+        retirePopup.style.display = 'none';
+    }
+
+
         const wdButton = document.getElementById('wdButton');
         const nbButton = document.getElementById('nbButton');
         wdButton.addEventListener('click', showExtrasPopup);
         nbButton.addEventListener('click', showExtrasPopup);
-    
-        // Function to send data to the server
         function sendDataToServer(value) {
-    axios.post(`/match/<%= match.id %>/ball`, { value: value })
+        axios.post(`/match/<%= match.id %>/ball`, { value: value })
         .then(response => {
             console.log('Data sent successfully:', value);
-            // Handle response if needed
-
-            // Reload the page after receiving a response
-setTimeout(() => {
-    window.location.reload();
-}, 400);
+        setTimeout(() => {
+            window.location.reload();
+        }, 400);
         })
         .catch(error => {
             console.error('Error sending data:', error);
             // Handle error
         });
 }
+        function sendchangebowlerData(playerId) {
+        // Send data using Axios
+        axios.post('/match/<%= match._id %>/selectbowler', {
+            bowler: playerId
+        }).then((response)=>{
+          setTimeout(() => {
+      window.location.reload();
+     }, 600);
+        })
+    }
+   
 
-    </script>
+    var overs = Number("<%= match.team1_overs %>");
+        // if (overs%1==0) {alert("Over up choose new bowler")}
+        var extratype= "wd"
+        function submitExtras() {
+        var extrasValue = document.getElementById('extrasSelect').value;
+        axios.post('/match/<%= match._id %>/extras/team1', {
+            type: extratype,
+            extra: extrasValue
+        })
+        .then(function (response) {
+          reload()
+        })
+    }
+    function extra(type){extratype=type}
+    function reload(params) {
+      setTimeout(() => {
+        window.location.reload()
+      }, 400);
+    }
+   
+   </script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <!-- <script src="/a.js"></script> -->
 </body>
