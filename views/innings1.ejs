@@ -72,6 +72,19 @@
             color: #ff4d6d;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
+        .next-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #ff4d6d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 10px 560px;
+                font-size: 0.8em;
+            }
 
         @media (max-width: 768px) { /* Target medium screens (adjust as needed) */
             body {
@@ -87,6 +100,7 @@
                 padding: 6px 12px;
                 font-size: 0.8em;
             }
+          
         }
 
         @media (max-width: 500px) { /* Target small screens */
@@ -116,7 +130,7 @@
 </head>
 <body>
     <a href="/match/<%= match._id %>" class="back-button">Back</a>
-    <h1>Team 1 Stats</h1>
+    <h1>Team <%= match.team1_name %> Stats</h1>
 
     <div class="scoreboard">
         <div><strong>Score:</strong> <%= match.team1_runs %>/<%= match.team1_wickets %></div>
@@ -181,11 +195,13 @@
                     <td><%= player.balls %></td>
                     <td><%= player.overs %></td>
                     <td><%= player.wickets %></td>
-                    <td><%= player.econony %></td>
+                    <td><%= player.economy %></td>
                 </tr>
             <% }); %>
         </tbody>
     </table>
-
+    <div style="display: flex; justify-content: center; align-items: center;" class="o">
+    <a  href="/match/<%= match._id %>/Innings2" class="back-button">Innings 2</a>
+</div>
 </body>
 </html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Matches</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #EDEDED;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 90%;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #171717;
+    }
+
+    .match-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .match-card {
+        background-color: #ffffff;
+        padding: 5px;
+        width: 90%;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+        text-decoration: none;
+        border: double #DA0037;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .match-card:hover {
+        transform: scale(1.02);
+    }
+
+    .match-details {
+        display: flex;
+        align-items: center;
+        width: 70%;
+    }
+
+    .team {
+        text-align: center;
+    }
+
+    .team-name {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #DA0037;
+    }
+
+    .match {
+        width: 100%;
+    }
+
+    .team-score {
+        font-size: 1.2em;
+        color: #444444;
+    }
+
+    .match-info {
+        text-align: right;
+    }
+
+    .result {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #171717;
+    }
+
+    .date {
+        color: #666666;
+    }
+
+    @media (max-width: 500px) {
+        .match-details {
+            width: 100%;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .match-info {
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .match-details > :nth-child(3) {
+            text-align: right;
+        }
+
+        .match-details > :nth-child(1) {
+            text-align: left;
+        }
+
+        .emoji {
+            display: flex;
+            margin-top: 10%;
+            width: 5%;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .team {
+            width: 40%;
+        }
+
+        .team-score {
+            font-size: 1em;
+        }
+
+        .match-card {
+            padding: 10px;
+        }
+    }
+</style>
+<body>
+    <div class="container">
+        <h1>All Matches</h1>
+        <div class="match-list">
+            <% matches.forEach(match => { %>
+                <div class="match-card">
+                    <a class="match" href="/<%= match._id %>/scorecard">
+                        <div class="match-details">
+                            <div class="team">
+                                <p class="team-name">Team <%= match.team1_name %></p>
+                                <p class="team-score"><%= match.team1_runs %>/<%= match.team1_wickets %></p>
+                            </div>
+                            <div class="emoji">
+                                🆚
+                            </div>
+                            <div class="team">
+                                <p class="team-name">Team <%= match.team2_name %></p>
+                                <p class="team-score"><%= match.team2_runs %>/<%= match.team2_wickets %></p>
+                            </div>
+                        </div>
+                        <div class="result">
+                            <% if (match.team1_runs > match.team2_runs) { %>
+                               Team <%= match.team1_name %> won by <%= match.team1_runs - match.team2_runs %> runs.
+                            <% } else if (match.team1_runs < match.team2_runs) { %>
+                               Team <%= match.team2_name %> won by <%= match.team2.length - match.team2_wickets %> wickets.
+                            <% } else { %>
+                                It's a tie!
+                            <% } %>                                
+                        </div>
+
+                    </a>
+                    <p style="margin: 1px;" class="date"><%= match.date.toDateString() %></p>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</body>
+</html>

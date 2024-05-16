@@ -4,6 +4,8 @@ const { boolean } = require('webidl-conversions')
 
 const matchschema =  mongoose.Schema({
     overs:Number,
+    team1_name:String,
+    team2_name:String,
     team1:[{
         playername:String,
         playerid:String
@@ -54,7 +56,7 @@ const matchschema =  mongoose.Schema({
         sixes:Number,
         overs:Number,
         wickets:Number,
-        econony:Number
+        economy:Number
     }],
     team2_player_bowling_stats:[{
         name:String,
@@ -65,7 +67,7 @@ const matchschema =  mongoose.Schema({
         sixes:Number,
         overs:Number,
         wickets:Number,
-        econony:Number
+        economy:Number
     }],
     
     t1:[playerschema],
@@ -101,6 +103,7 @@ const matchschema =  mongoose.Schema({
         sixes:Number,
         overs:Number,
         wickets:Number, 
+        economy:Number,
     }
 
 })

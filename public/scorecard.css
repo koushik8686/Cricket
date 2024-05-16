@@ -1,0 +1,76 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: whitesmoke; /* Light pinkish red background */
+  color: black; /* Darker reddish pink text */
+  margin: 0;
+  padding: 10px; /* Reduced padding for smaller screens */
+}
+.main {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), /* First layer */
+              0 6px 12px rgba(0, 0, 0, 0.15); /* Second layer for depth */
+  padding: 10px; /* Add some padding for better presentation */
+  background-color: white; /* Ensure the background is white */
+  border-radius: 5px; /* Add some border radius for rounded corners */
+}
+
+
+.team {
+  margin-bottom: 15px; /* Adjusted margin for better flow */
+}
+
+h2 {
+  text-align: center;
+  color: #b01e46; /* Darker reddish pink for headings */
+  margin-bottom: 8px; /* Add some space after headings */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px; /* Reduced margin for compactness */
+}
+
+th, td {
+  padding: 6px;
+  border: 1px solid #d8a3b5; /* Lighter pinkish red border */
+  text-align: center;
+}
+
+th {
+  background-color: #DA0037; /* Dark reddish pink for table headers */
+  color: #fff;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f7d7e1; /* Lighter reddish pink for even rows */
+}
+
+tbody tr:hover {
+  background-color: #ffcedb; /* Lighter reddish pink background on hover */
+}
+
+button {
+  margin-top: 10px;
+  padding: 0.8rem 1.6rem;
+  background-color: #e73a5f; /* Pinkish red button background */
+  color: #fff; /* White text on buttons */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 34vw;
+}
+
+/* Media query for screens up to 500px wide */
+@media screen and (max-width: 500px) {
+  table {
+      font-size: 12px; /* Decrease font size for smaller screens */
+  }
+
+  th, td {
+      padding: 5px; /* Decrease padding for smaller screens */
+  }
+
+  h2 {
+      font-size: 18px; /* Decrease heading font size for smaller screens */
+  }
+}

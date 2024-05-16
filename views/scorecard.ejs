@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Scorecard</title>
+    <link rel="stylesheet" href="/scorecard.css">
+</head>
+<body><div class="main">
+    <h2 style="text-align: center;">Match Scorecrd</h2>
+    <p  style=" font-size: 21px; text-align: center;"> <strong>Team1:</strong> <%= match.team1_runs %>-<%= match.team1_wickets %> (<%= match.team1_overs %>) <strong>/</strong> <strong>Team1:</strong> <%= match.team2_runs %>-<%= match.team2_wickets %>(<%= match.team2_overs %>) </p>
+    <p style="text-align: center;">
+        <% if (match.team1_runs > match.team2_runs) { %>
+            Team 1 won by <%= match.team1_runs - match.team2_runs %> runs.
+        <% } else if (match.team1_runs < match.team2_runs) { %>
+            Team 2 won by <%= match.team2_runs - match.team1_runs %> runs.
+        <% } else { %>
+            It's a tie!
+        <% } %>
+    </p>
+
+    <div class="team">
+        <h2>Team 1</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Runs</th>
+                    <th>Balls</th>
+                    <th>Fours</th>
+                    <th>Sixes</th>
+                    <th>Strike Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% match.team1_player_batting_stats.forEach(function(player) { %>
+                    <tr>
+                        <td>
+                            <%= player.name %>
+                            <div style="font-size: 0.8em; color: #555;">
+                                <%= player.out_type %>
+                                <% if (player.out_type === 'run out') { %>
+                                    (<%= player.assist %>)
+                                <% } else if (player.out_type === 'bowled') { %>
+                                    (<%= player.bowler_name %>)
+                                <% } else if (player.out_type === 'caught') { %>
+                                    (<%= player.bowler_name %> / <%= player.assist %>)
+                                <% } %>
+                            </div>
+                        </td>
+                        <td><%= player.runs %></td>
+                        <td><%= player.balls %></td>
+                        <td><%= player.fours %></td>
+                        <td><%= player.sixes %></td>
+                        <td><%= player.strike_rate %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+
+        <h2>Team 1 Bowling Stats</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Runs</th>
+                    <th>Balls</th>
+                    <th>Overs</th>
+                    <th>Wickets</th>
+                    <th>Economy</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% match.team1_player_bowling_stats.forEach(function(player) { %>
+                    <tr>
+                        <td><%= player.name %></td>
+                        <td><%= player.runs %></td>
+                        <td><%= player.balls %></td>
+                        <td><%= player.overs %></td>
+                        <td><%= player.wickets %></td>
+                        <td><%= player.economy %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="team">
+        <h2>Team 2</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Runs</th>
+                    <th>Balls</th>
+                    <th>Fours</th>
+                    <th>Sixes</th>
+                    <th>Strike Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% match.team2_player_batting_stats.forEach(function(player) { %>
+                    <tr>
+                        <td>
+                            <%= player.name %>
+                            <div style="font-size: 0.8em; color: #555;">
+                                <%= player.out_type %>
+                                <% if (player.out_type === 'run out') { %>
+                                    (<%= player.assist %>)
+                                <% } else if (player.out_type === 'bowled') { %>
+                                    (<%= player.bowler_name %>)
+                                <% } else if (player.out_type === 'caught') { %>
+                                    (<%= player.bowler_name %> / <%= player.assist %>)
+                                <% } %>
+                            </div>
+                        </td>
+                        <td><%= player.runs %></td>
+                        <td><%= player.balls %></td>
+                        <td><%= player.fours %></td>
+                        <td><%= player.sixes %></td>
+                        <td><%= player.strike_rate %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+
+        <h2>Team 2 Bowling Stats</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Runs</th>
+                    <th>Balls</th>
+                    <th>Overs</th>
+                    <th>Wickets</th>
+                    <th>Economy</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% match.team2_player_bowling_stats.forEach(function(player) { %>
+                    <tr>
+                        <td><%= player.name %></td>
+                        <td><%= player.runs %></td>
+                        <td><%= player.balls %></td>
+                        <td><%= player.overs %></td>
+                        <td><%= player.wickets %></td>
+                        <td><%= player.economy %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    </div>
+    <% if (a === "ok") { %>
+        <a class="link" href="/confirm/<%= match._id %>"><button>Confirm</button></a>
+    <% } else { %>
+        <a class="link" href="/matches"><button>Back</button></a>
+   <% } %>
+    
+</body>
+</html>

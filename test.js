@@ -1,6 +1,28 @@
-if (match.currentbowler.overs % 0.5 === 0 && match.currentbowler.overs % 1 !== 0) {
-    match.currentbowler.overs += 0.5; // Increment by 0.1
-} else {
-    console.log(match.currentbowler.overs.toFixed(1)); // Logging the current overs with one decimal place
-    match.currentbowler.overs = parseFloat((match.currentbowler.overs + 0.1).toFixed(1)); // Increment by 0.1 and round to one decimal place
-}
+app.get("/confirm/:match:id" ,async function (req , res) { 
+    await Match.findById(req.params.match).then(async (match) => {
+            // Update player match count for Team 1
+            // await Promise.all(match.team1.map(async (player) => {
+            //     const foundPlayer = await playermodel.findById(player.playerid);
+            //     if (foundPlayer) {
+            //         foundPlayer.matches++;
+            //         await foundPlayer.save();
+            //     }
+            // }));
+    
+            // // Update player match count for Team 2
+            // await Promise.all(match.team2.map(async (player) => {
+            //     const foundPlayer = await playermodel.findById(player.playerid);
+            //     if (foundPlayer) {
+            //         foundPlayer.matches++;
+            //         await foundPlayer.save();
+            //     }
+            // }));
+            // await updatePlayerbatStats(match.team1_player_batting_stats);
+            // await updatePlayerbatStats(match.team2_player_batting_stats);
+            // await updatePlayerStats(match.team1_player_bowling_stats);
+            // await updatePlayerStats(match.team2_player_bowling_stats);
+            // res.redirect("/players")
+            // Send response or perform additional operations
+        });
+    res.redirect("/players")
+ })

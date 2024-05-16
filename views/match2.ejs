@@ -247,20 +247,20 @@
   </style>
 </head>
 <body onload="showPopup()">
-  
+  <h2>2nd Innings </h2>
     <div class="container">
-        <% if (match.team1_player_batting_stats.length === 0) { %>
+        <% if (match.team2_player_batting_stats.length === 0) { %>
         <div class="popup" id="popup">
                 <h2>Choose Openers</h2>
-                <form action="/match/<%= match._id %>/openers1" method="post">
-                    <% match.team1.forEach(player => { %>
+                <form action="/match/<%= match._id %>/openers2" method="post">
+                    <% match.team2.forEach(player => { %>
                         <label>
                             <input type="checkbox" name="openers" value="<%= player.playerid %>">
                             <%= player.playername %>
                         </label>
                     <% }); %>
                     <select name="bowler">
-                        <% match.team2.forEach(player => { %>
+                        <% match.team1.forEach(player => { %>
                             <option value="<%= player.playerid %>"><%= player.playername %></option>
                         <% }); %>
                     </select>
@@ -271,7 +271,7 @@
        
         <div class="stats">
             <p>Total Overs: <%= match.overs %></p>
-            <p>Score: <%= match.team1_runs %>/<%= match.team1_wickets %> <span>   </span> (<%= match.team1_overs %>)</p>
+            <p>Score: <%= match.team2_runs %>/<%= match.team2_wickets %> <span>   </span> (<%= match.team2_overs %>)</p>
 <hr>
      <div class="bat-bowl">
         <div class="bat">
@@ -295,7 +295,7 @@
             <form style="display: flex;" id="bowlerForm">
               <select name="bowler" onchange="sendchangebowlerData(this.value)">
                 <option value="">Select Bowler</option>
-                  <% match.team2.forEach(player => { %>
+                  <% match.team1.forEach(player => { %>
                       <option value="<%= player.playerid %>"><%= player.playername %></option>
                   <% }); %>
               </select>
@@ -348,10 +348,10 @@
               <h2>Select next batsman</h2>
               <form id="wicketsForm">
                   <label for="nextbatsmanSelect">Select Next Batsman:</label>
-                  <% if (match.team1_wickets < match.team1.length-2) { %>
+                  <% if (match.team2_wickets < match.team2.length-2) { %>
                     <select name="nextbatsman" id="nextbatsmanSelect">
                         <option value="" disabled selected>Choose Next Batsman</option>
-                        <% match.team1.forEach(player => { %>
+                        <% match.team2.forEach(player => { %>
                             <% const isNotInBattingStats = !match.team1_player_batting_stats.some(stat => stat.id === player.playerid); %>
                             <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
                             <% if (isNotInBattingStats && isNotCurrentBatter) { %>
@@ -372,16 +372,16 @@
                 <p>Run Out By</p>
                 <select name="runoutassist" id="runoutassist">
                     <option value="" disabled selected>Choose Run Out By</option>
-                    <% match.team2.forEach(player => { %>
+                    <% match.team1.forEach(player => { %>
                         <option value="<%= player.playerid %>"><%= player.playername %></option>
                     <% }); %>
                 </select>
                 <p>Next Batsman</p>
                 <label for="nextbatsmanSelect">Select Next Batsman:</label>
-                <% if (match.team1_wickets < match.team1.length - 2) { %>
+                <% if (match.team2_wickets < match.team2.length - 2) { %>
                     <select name="nextbatsman" id="nextbatsmanSelect">
                         <option value="" disabled selected>Choose Next Batsman</option>
-                        <% match.team1.forEach(player => { %>
+                        <% match.team2.forEach(player => { %>
                             <% const isNotInBattingStats = !match.team1_player_batting_stats.some(stat => stat.id === player.playerid); %>
                             <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
                             <% if (isNotInBattingStats && isNotCurrentBatter) { %>
@@ -406,16 +406,16 @@
                 <p>Caught By</p>
                 <select name="caughtBy" id="caughtBy">
                     <option value="" disabled selected>Choose Caught By</option>
-                    <% match.team2.forEach(player => { %>
+                    <% match.team1.forEach(player => { %>
                         <option value="<%= player.playerid %>"><%= player.playername %></option>
                     <% }); %>
                 </select>
                 <p>Next Batsman</p>
                 <label for="nextBatsmanSelectCatch">Select Next Batsman:</label>
-                <% if (match.team1_wickets < match.team1.length - 2) { %>
+                <% if (match.team2_wickets < match.team2.length - 2) { %>
                     <select name="nextBatsman" id="nextBatsmanSelectCatch">
                         <option value="" disabled selected>Choose Next Batsman</option>
-                        <% match.team1.forEach(player => { %>
+                        <% match.team2.forEach(player => { %>
                             <% const isNotInBattingStats = !match.team1_player_batting_stats.some(stat => stat.id === player.playerid); %>
                             <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
                             <% if (isNotInBattingStats && isNotCurrentBatter) { %>
@@ -441,7 +441,7 @@
               <label for="retireBatsmanSelect">Select Batsman:</label>
               <select name="retireBatsman" id="retireBatsmanSelect">
                   <option value="" disabled selected>Choose Batsman</option>
-                  <% match.team1.forEach(player => { %>
+                  <% match.team2.forEach(player => { %>
                       <% const isCurrentBatter = match.currentbatters.some(batter => batter.id === player.playerid); %>
                       <% if (!isCurrentBatter) { %>
                           <option value="<%= player.playerid %>"><%= player.playername %></option>
@@ -462,7 +462,7 @@
   </div>
 
   <div class="innings-over">
-    <a style="text-decoration: none;" href="/match/<%= match._id %>/innings1">
+    <a style="text-decoration: none;" href="/match/<%= match._id %>/scorecard">
     <button class="innings-button ">
       Innings Over
     </button></a>
@@ -518,8 +518,8 @@
 
     console.log(selectedBatsman);
 
-    const team1Wickets = "<%= match.team1_wickets %>";
-    const team1Length = "<%= match.team1.length %>-2";
+    const team1Wickets = "<%= match.team2_wickets %>";
+    const team1Length = "<%= match.team2.length %>-2";
 
     // Check if selectedBatsman is undefined or empty
     if (!selectedBatsman && team1Wickets !== team1Length) {
@@ -537,7 +537,7 @@
         nextBatsman: selectedBatsman
     };
 
-    axios.post(`/match/${matchId}/wicket`, data)
+    axios.post(`/match/${matchId}/team2/wicket`, data)
     .then(response => {
         hidewiketsPopup();
         reload();
@@ -584,7 +584,7 @@
         nextBatsman
     };
 
-    axios.post(`/match/${matchId}/wicket`, data)
+    axios.post(`/match/${matchId}/team2/wicket`, data)
     .then(response => {
         console.log('Success:', response.data);
         hideRunOutPopup();
@@ -629,7 +629,7 @@
         nextBatsman
     };
 
-    axios.post(`/match/${matchId}/wicket`, data)
+    axios.post(`/match/${matchId}/team2/wicket`, data)
     .then(response => {
         console.log('Success:', response.data);
         hideCatchPopup();
@@ -662,7 +662,7 @@
             type: "retire",
             nextbatsman: selectedBatsman
         };
-        axios.post(`/match/${matchId}/retire`, data)
+        axios.post(`/match/${matchId}/team2/retire`, data)
         .then(response => {
             console.log('Success:', response.data);
             hideRetirePopup();
@@ -687,7 +687,7 @@
         wdButton.addEventListener('click', showExtrasPopup);
         nbButton.addEventListener('click', showExtrasPopup);
         function sendDataToServer(value) {
-        axios.post(`/match/<%= match.id %>/ball`, { value: value })
+        axios.post(`/match/<%= match.id %>/team2/ball`, { value: value })
         .then(response => {
             console.log('Data sent successfully:', value);
         setTimeout(() => {
@@ -701,7 +701,7 @@
 }
         function sendchangebowlerData(playerId) {
         // Send data using Axios
-        axios.post('/match/<%= match._id %>/selectbowler', {
+        axios.post('/match/<%= match._id %>/team2/selectbowler', {
             bowler: playerId
         }).then((response)=>{
           setTimeout(() => {
@@ -711,12 +711,12 @@
     }
    
 
-    var overs = Number("<%= match.team1_overs %>");
+    var overs = Number("<%= match.team2_overs %>");
         // if (overs%1==0) {alert("Over up choose new bowler")}
         var extratype= "wd"
         function submitExtras() {
         var extrasValue = document.getElementById('extrasSelect').value;
-        axios.post('/match/<%= match._id %>/extras/team1', {
+        axios.post('/match/<%= match._id %>/extras/team2', {
             type: extratype,
             extra: extrasValue
         })
