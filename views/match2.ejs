@@ -251,6 +251,7 @@
 </head>
 <body onload="showPopup()">
   <h2>2nd Innings </h2>
+  <h4>Target :<%= match.team1_runs +1%>    need <%= match.team1_runs - match.team2_runs %> to win</h4>
     <div class="container">
         <% if (match.team2_player_batting_stats.length === 0) { %>
         <div class="popup" id="popup">
@@ -355,11 +356,17 @@
                     <select name="nextbatsman" id="nextbatsmanSelect">
                         <option value="" disabled selected>Choose Next Batsman</option>
                         <% match.team2.forEach(player => { %>
-                            <% const isNotInBattingStats = !match.team1_player_batting_stats.some(stat => stat.id === player.playerid); %>
-                            <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
-                            <% if (isNotInBattingStats && isNotCurrentBatter) { %>
-                                <option value="<%= player.playerid %>"><%= player.playername %></option>
+                          <% const playerBattingStat = match.team2_player_batting_stats.find(stat => stat.id === player.playerid); %>
+                          <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
+                          <% if (playerBattingStat) { %>
+                            <% if (playerBattingStat.out_type === " " && isNotCurrentBatter) { %>
+                              <option value="<%= player.playerid %>"><%= player.playername %></option>
                             <% } %>
+                          <% } else { %>
+                            <% if (isNotCurrentBatter) { %>
+                              <option value="<%= player.playerid %>"><%= player.playername %></option>
+                            <% } %>
+                          <% } %>
                         <% }); %>
                     </select>
                 <% } %>
@@ -385,11 +392,17 @@
                     <select name="nextbatsman" id="nextbatsmanSelect">
                         <option value="" disabled selected>Choose Next Batsman</option>
                         <% match.team2.forEach(player => { %>
-                            <% const isNotInBattingStats = !match.team1_player_batting_stats.some(stat => stat.id === player.playerid); %>
-                            <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
-                            <% if (isNotInBattingStats && isNotCurrentBatter) { %>
-                                <option value="<%= player.playerid %>"><%= player.playername %></option>
+                          <% const playerBattingStat = match.team2_player_batting_stats.find(stat => stat.id === player.playerid); %>
+                          <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
+                          <% if (playerBattingStat) { %>
+                            <% if (playerBattingStat.out_type === " " && isNotCurrentBatter) { %>
+                              <option value="<%= player.playerid %>"><%= player.playername %></option>
                             <% } %>
+                          <% } else { %>
+                            <% if (isNotCurrentBatter) { %>
+                              <option value="<%= player.playerid %>"><%= player.playername %></option>
+                            <% } %>
+                          <% } %>
                         <% }); %>
                     </select>
                 <% } else { %>
@@ -419,11 +432,17 @@
                     <select name="nextBatsman" id="nextBatsmanSelectCatch">
                         <option value="" disabled selected>Choose Next Batsman</option>
                         <% match.team2.forEach(player => { %>
-                            <% const isNotInBattingStats = !match.team1_player_batting_stats.some(stat => stat.id === player.playerid); %>
-                            <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
-                            <% if (isNotInBattingStats && isNotCurrentBatter) { %>
-                                <option value="<%= player.playerid %>"><%= player.playername %></option>
+                          <% const playerBattingStat = match.team2_player_batting_stats.find(stat => stat.id === player.playerid); %>
+                          <% const isNotCurrentBatter = !match.currentbatters.some(batter => batter.id === player.playerid); %>
+                          <% if (playerBattingStat) { %>
+                            <% if (playerBattingStat.out_type === " " && isNotCurrentBatter) { %>
+                              <option value="<%= player.playerid %>"><%= player.playername %></option>
                             <% } %>
+                          <% } else { %>
+                            <% if (isNotCurrentBatter) { %>
+                              <option value="<%= player.playerid %>"><%= player.playername %></option>
+                            <% } %>
+                          <% } %>
                         <% }); %>
                     </select>
                 <% } else { %>

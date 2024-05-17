@@ -367,9 +367,6 @@ res.send("hlo")
     Match.findById(req.params.matchId).then(async function (match) {
         if (match.team1_overs % 0.5 === 0 && match.team1_overs % 1 !== 0) {
             match.team1_overs += 0.5; // Increment by 0.1
-            const tempBatter = match.currentbatters[0];
-            match.currentbatters[0] = match.currentbatters[1];
-            match.currentbatters[1] = tempBatter;
         } else {
             match.team1_overs = parseFloat((match.team1_overs + 0.1).toFixed(1)); // Increment by 0.1 and round to one decimal place
         }
@@ -378,6 +375,8 @@ res.send("hlo")
         } else {
             match.currentbowler.overs = parseFloat((match.currentbowler.overs + 0.1).toFixed(1)); // Increment by 0.1 and round to one decimal place
         }
+        match.currentbowler.balls += 1
+
         if (req.body.type == "bowled") {
             match.team1_wickets += 1;
             console.log( match.currentbatters[0]);
@@ -427,7 +426,17 @@ res.send("hlo")
                     bowler_name: " ",
                     assist: " "
                 });
-            }}
+            } else{
+                match.currentbatters[0] = {
+                    name: match.team1_player_batting_stats[existingPlayerIndex].name,
+                    id: match.team1_player_batting_stats[existingPlayerIndex].id,
+                    runs: match.team1_player_batting_stats[existingPlayerIndex].runs,
+                    balls: match.team1_player_batting_stats[existingPlayerIndex].balls,
+                    fours: match.team1_player_batting_stats[existingPlayerIndex].fours,
+                    sixes: match.team1_player_batting_stats[existingPlayerIndex].sixes,
+                };
+            }
+        }
             if (match.team1_wickets==match.team1.length-1) {
                 match.currentbatters[0]=match.currentbatters[1]
                 match.currentbatters[1]={};
@@ -481,7 +490,17 @@ res.send("hlo")
                     bowler_name: " ",
                     assist: " "
                 });
-            }}
+            } else{
+                match.currentbatters[0] = {
+                    name: match.team1_player_batting_stats[existingPlayerIndex].name,
+                    id: match.team1_player_batting_stats[existingPlayerIndex].id,
+                    runs: match.team1_player_batting_stats[existingPlayerIndex].runs,
+                    balls: match.team1_player_batting_stats[existingPlayerIndex].balls,
+                    fours: match.team1_player_batting_stats[existingPlayerIndex].fours,
+                    sixes: match.team1_player_batting_stats[existingPlayerIndex].sixes,
+                };
+            }
+        }
             if (match.team1_wickets==match.team1.length-1) {
                 match.currentbatters[0]=match.currentbatters[1]
                 match.currentbatters[1]={};
@@ -539,6 +558,15 @@ res.send("hlo")
                     bowler_name: " ",
                     assist: " "
                 });
+            }else{
+                match.currentbatters[0] = {
+                    name: match.team1_player_batting_stats[existingPlayerIndex].name,
+                    id: match.team1_player_batting_stats[existingPlayerIndex].id,
+                    runs: match.team1_player_batting_stats[existingPlayerIndex].runs,
+                    balls: match.team1_player_batting_stats[existingPlayerIndex].balls,
+                    fours: match.team1_player_batting_stats[existingPlayerIndex].fours,
+                    sixes: match.team1_player_batting_stats[existingPlayerIndex].sixes,
+                };
             }}
             if (match.team1_wickets==match.team1.length-1) {
                 match.currentbatters[0]=match.currentbatters[1]
@@ -551,23 +579,18 @@ res.send("hlo")
 });
 app.post("/match/:matchid/retire", async (req, res) => {
      await Match.findById(req.params.matchid).then(async (match)=>{
+        console.log(req.body);
         const currentBatterId = match.currentbatters[0].id;
         // Find the index of the current batter in team1_player_batting_stats
-        const currentBatterStatsIndex = match.team1_player_batting_stats.findIndex(player => player.playerid === currentBatterId);
+        const currentBatterStatsIndex = match.team1_player_batting_stats.findIndex(player => player.id === currentBatterId);
+        const nextBatsmanindex = match.team1_player_batting_stats.findIndex(player => player.id === req.body.nextbatsman);
         var newBatsman = {}
         match.team1.forEach(player => {
             if (player.playerid === req.body.nextbatsman) {
                 newBatsman= player
             }
         });
-        match.currentbatters[0] = {
-            name: newBatsman.playername,
-            id: newBatsman.playerid,
-            runs: 0,
-            balls: 0,
-            fours: 0,
-            sixes: 0
-        };
+        console.log(currentBatterStatsIndex , nextBatsmanindex);
         if (currentBatterStatsIndex !== -1) {
             // Update existing batter stats
             const currentBatterStats = match.team1_player_batting_stats[currentBatterStatsIndex];
@@ -579,22 +602,41 @@ app.post("/match/:matchid/retire", async (req, res) => {
             currentBatterStats.out_type = " ";
             currentBatterStats.bowler_name = " ";
             currentBatterStats.assist = " ";
-        } else {
-            // Add new batter stats if not exists
+        } 
+        if (nextBatsmanindex===-1) 
+            {
+            console.log("pushed");
             match.team1_player_batting_stats.push({
-                name: match.currentbatters[0].name,
-                id: currentBatterId,
-                runs: match.currentbatters[0].runs,
-                balls: match.currentbatters[0].balls,
-                fours: match.currentbatters[0].fours,
-                sixes: match.currentbatters[0].sixes,
-                strike_rate: match.currentbatters[0].balls === 0 ? 0 : parseFloat(((match.currentbatters[0].runs / match.currentbatters[0].balls) * 100).toFixed(2)),
+                name: newBatsman.playername,
+                id: newBatsman.playerid,
+                runs: 0,
+                balls: 0,
+                fours:0,
+                sixes: 0,
+                strike_rate: 0,
                 out_type: " ",
                 bowler_name: " ",
                 assist: " "
             });
         }
-
+        if (nextBatsmanindex!== -1) {
+            match.currentbatters[0] = {
+                name: newBatsman.playername,
+                id: newBatsman.playerid,
+                runs: match.team1_player_batting_stats[nextBatsmanindex].runs,
+                balls: match.team1_player_batting_stats[nextBatsmanindex].balls,
+                fours: match.team1_player_batting_stats[nextBatsmanindex].fours,
+                sixes: match.team1_player_batting_stats[nextBatsmanindex].sixes,
+            };  
+        }else{
+        match.currentbatters[0] = {
+            name: newBatsman.playername,
+            id: newBatsman.playerid,
+            runs: 0,
+            balls: 0,
+            fours: 0,
+            sixes: 0
+        };}
         await match.save();
         res.send("OK");
          });
@@ -602,7 +644,6 @@ app.post("/match/:matchid/retire", async (req, res) => {
 })
 
 app.get("/match/:match/innings1", async (req, res) => {
-    console.log("YO");
     await Match.findById(req.params.match).then((match) => {
         match.team2_player_bowling_stats.forEach(player => {
             if (player.balls !== 0) {
@@ -879,9 +920,6 @@ app.post("/match/:matchId/team2/wicket", function (req, res) {
     Match.findById(req.params.matchId).then(async function (match) {
         if (match.team2_overs % 0.5 === 0 && match.team2_overs % 1 !== 0) {
             match.team2_overs += 0.5; // Increment by 0.1
-            const tempBatter = match.currentbatters[0];
-            match.currentbatters[0] = match.currentbatters[1];
-            match.currentbatters[1] = tempBatter;
         } else {
             match.team2_overs = parseFloat((match.team2_overs + 0.1).toFixed(1)); // Increment by 0.1 and round to one decimal place
         }
@@ -890,6 +928,7 @@ app.post("/match/:matchId/team2/wicket", function (req, res) {
         } else {
             match.currentbowler.overs = parseFloat((match.currentbowler.overs + 0.1).toFixed(1)); // Increment by 0.1 and round to one decimal place
         }
+        match.currentbowler.balls += 1
         if (req.body.type == "bowled") {
             match.team2_wickets += 1;
             const currentBatterId = match.currentbatters[0].id;
@@ -935,7 +974,16 @@ app.post("/match/:matchId/team2/wicket", function (req, res) {
                     bowler_name: " ",
                     assist: " "
                 });
-            }}
+            } else{
+                match.currentbatters[0] = {
+                name: match.team2_player_batting_stats[existingPlayerIndex].name,
+                id: match.team2_player_batting_stats[existingPlayerIndex].id,
+                runs: match.team2_player_batting_stats[existingPlayerIndex].runs,
+                balls: match.team2_player_batting_stats[existingPlayerIndex].balls,
+                fours: match.team2_player_batting_stats[existingPlayerIndex].fours,
+                sixes: match.team2_player_batting_stats[existingPlayerIndex].sixes,
+            };}
+        }
             if (match.team2_wickets==match.team2.length-1) {
                 match.currentbatters[0]=match.currentbatters[1]
                 match.currentbatters[1]={};
@@ -989,7 +1037,16 @@ app.post("/match/:matchId/team2/wicket", function (req, res) {
                     bowler_name: " ",
                     assist: " "
                 });
-            }}
+            }else{
+                match.currentbatters[0] = {
+                name: match.team2_player_batting_stats[existingPlayerIndex].name,
+                id: match.team2_player_batting_stats[existingPlayerIndex].id,
+                runs: match.team2_player_batting_stats[existingPlayerIndex].runs,
+                balls: match.team2_player_batting_stats[existingPlayerIndex].balls,
+                fours: match.team2_player_batting_stats[existingPlayerIndex].fours,
+                sixes: match.team2_player_batting_stats[existingPlayerIndex].sixes,
+            };}
+        }
             if (match.team2_wickets==match.team2.length-1) {
                 match.currentbatters[0]=match.currentbatters[1]
                 match.currentbatters[1]={};
@@ -1048,7 +1105,15 @@ app.post("/match/:matchId/team2/wicket", function (req, res) {
                     bowler_name: " ",
                     assist: " "
                 });
-            }}
+            }else{
+                match.currentbatters[0] = {
+                name: match.team2_player_batting_stats[existingPlayerIndex].name,
+                id: match.team2_player_batting_stats[existingPlayerIndex].id,
+                runs: match.team2_player_batting_stats[existingPlayerIndex].runs,
+                balls: match.team2_player_batting_stats[existingPlayerIndex].balls,
+                fours: match.team2_player_batting_stats[existingPlayerIndex].fours,
+                sixes: match.team2_player_batting_stats[existingPlayerIndex].sixes,
+            };}}
             if (match.team2_wickets==match.team2.length-1) {
                 match.currentbatters[0]=match.currentbatters[1]
                 match.currentbatters[1]={};
@@ -1060,23 +1125,19 @@ app.post("/match/:matchId/team2/wicket", function (req, res) {
 });
 app.post("/match/:matchid/team2/retire", async (req, res) => {
     await Match.findById(req.params.matchid).then(async (match)=>{
+       console.log(req.body);
        const currentBatterId = match.currentbatters[0].id;
        // Find the index of the current batter in team2_player_batting_stats
-       const currentBatterStatsIndex = match.team2_player_batting_stats.findIndex(player => player.playerid === currentBatterId);
+       const currentBatterStatsIndex = match.team2_player_batting_stats.findIndex(player => player.id === currentBatterId);
+       const nextBatsmanindex = match.team2_player_batting_stats.findIndex(player => player.id === req.body.nextbatsman);
        var newBatsman = {}
+      var newBatsman={} 
        match.team2.forEach(player => {
            if (player.playerid === req.body.nextbatsman) {
                newBatsman= player
            }
        });
-       match.currentbatters[0] = {
-           name: newBatsman.playername,
-           id: newBatsman.playerid,
-           runs: 0,
-           balls: 0,
-           fours: 0,
-           sixes: 0
-       };
+       console.log(currentBatterStatsIndex , nextBatsmanindex);
        if (currentBatterStatsIndex !== -1) {
            // Update existing batter stats
            const currentBatterStats = match.team2_player_batting_stats[currentBatterStatsIndex];
@@ -1088,22 +1149,40 @@ app.post("/match/:matchid/team2/retire", async (req, res) => {
            currentBatterStats.out_type = " ";
            currentBatterStats.bowler_name = " ";
            currentBatterStats.assist = " ";
-       } else {
-           // Add new batter stats if not exists
+       } 
+       if(nextBatsmanindex===-1) {
+        // Add new batter stats if not exists
            match.team2_player_batting_stats.push({
-               name: match.currentbatters[0].name,
-               id: currentBatterId,
-               runs: match.currentbatters[0].runs,
-               balls: match.currentbatters[0].balls,
-               fours: match.currentbatters[0].fours,
-               sixes: match.currentbatters[0].sixes,
-               strike_rate: match.currentbatters[0].balls === 0 ? 0 : parseFloat(((match.currentbatters[0].runs / match.currentbatters[0].balls) * 100).toFixed(2)),
-               out_type: " ",
-               bowler_name: " ",
-               assist: " "
-           });
+            name: newBatsman.playername,
+            id: newBatsman.playerid,
+            runs: 0,
+            balls: 0,
+            fours:0,
+            sixes: 0,
+            strike_rate: 0,
+            out_type: " ",
+            bowler_name: " ",
+            assist: " "
+        });
        }
-
+       if (nextBatsmanindex!== -1) {
+           match.currentbatters[0] = {
+               name: newBatsman.playername,
+               id: newBatsman.playerid,
+               runs: match.team2_player_batting_stats[nextBatsmanindex].runs,
+               balls: match.team2_player_batting_stats[nextBatsmanindex].balls,
+               fours: match.team2_player_batting_stats[nextBatsmanindex].fours,
+               sixes: match.team2_player_batting_stats[nextBatsmanindex].sixes,
+           };  
+       }else{
+       match.currentbatters[0] = {
+           name: newBatsman.playername,
+           id: newBatsman.playerid,
+           runs: 0,
+           balls: 0,
+           fours: 0,
+           sixes: 0
+       };}
        await match.save();
        res.send("OK");
         });
@@ -1127,7 +1206,7 @@ app.get("/match/:match/scorecard", async (req, res) => {
                     playerStats.balls = currentBatter.balls;
                     playerStats.fours = currentBatter.fours;
                     playerStats.sixes = currentBatter.sixes;
-                    playerStats.strike_rate = (currentBatter.balls > 0) ? (currentBatter.runs / currentBatter.balls) * 100 : 0;
+                    playerStats.strike_rate = (currentBatter.balls > 0) ? parseFloat(((currentBatter.runs / currentBatter.balls) * 100).toFixed(2)) : 0;
                 }    
       }        
         });
