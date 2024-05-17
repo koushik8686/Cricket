@@ -446,7 +446,7 @@
                   <option value="" disabled selected>Choose Batsman</option>
                   <% match.team2.forEach(player => { %>
                       <% const isCurrentBatter = match.currentbatters.some(batter => batter.id === player.playerid); %>
-                      <% if (!isCurrentBatter) { %>
+                      <% if (!isCurrentBatter ) { %>
                           <option value="<%= player.playerid %>"><%= player.playername %></option>
                       <% } %>
                   <% }); %>

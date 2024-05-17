@@ -286,17 +286,7 @@ app.get("/" , function (req , res) {
             await match.save()
             return 
         } else{
-            match.team1_runs+=Number(value)
-        if (match.team1_overs % 0.5 === 0 && match.team1_overs % 1 !== 0) {
-            match.team1_overs += 0.5; // Increment by 0.1
-            console.log("heeere");
-            if (match.currentbatters[1].runs!==undefined) {
-            const tempBatter = match.currentbatters[0];
-            match.currentbatters[0] = match.currentbatters[1];
-            match.currentbatters[1] = tempBatter; }
-        } else {
-            match.team1_overs = parseFloat((match.team1_overs + 0.1).toFixed(1)); // Increment by 0.1 and round to one decimal place
-        }
+        
         if (match.currentbowler.overs % 0.5 === 0 && match.currentbowler.overs % 1 !== 0) {
             match.currentbowler.overs += 0.5; // Increment by 0.1
         } else {
@@ -323,6 +313,16 @@ app.get("/" , function (req , res) {
                 }
             }
         });
+        match.team1_runs+=Number(value)
+        if (match.team1_overs % 0.5 === 0 && match.team1_overs % 1 !== 0) {
+            match.team1_overs += 0.5; // Increment by 0.1
+            console.log("heeere");
+            if (match.currentbatters[1].runs!==undefined) {
+                console.log("ok");
+           }
+        } else {
+            match.team1_overs = parseFloat((match.team1_overs + 0.1).toFixed(1)); // Increment by 0.1 and round to one decimal place
+        }
         if (value==1 || value==3) {
             console.log(match.currentbatters[1].runs);
             if (match.currentbatters[1].runs !==undefined) {
@@ -807,10 +807,6 @@ app.post('/match/:matchId/team2/ball', async (req, res) => {
         if (match.team2_overs % 0.5 === 0 && match.team2_overs % 1 !== 0) {
             match.team2_overs += 0.5; // Increment by 0.1
             console.log(match.currentbatters[1].runs);
-            if (match.currentbatters[1].runs!==undefined) {
-            const tempBatter = match.currentbatters[0];
-            match.currentbatters[0] = match.currentbatters[1];
-            match.currentbatters[1] = tempBatter; }
         } else {
             match.team2_overs = parseFloat((match.team2_overs + 0.1).toFixed(1)); // Increment by 0.1 and round to one decimal place
         }

@@ -1,119 +1,214 @@
-<!-- players.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-adsense-account" content="ca-pub-7252077512047028">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7252077512047028"
-     crossorigin="anonymous"></script>
-    <title>Player List</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        .player-list {
-            margin-top: 20px;
-            list-style-type: none;
-            padding: 0;
-            
-        }
-        .player-item {
-            display: flex;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Horizontal offset, vertical offset, blur radius, spread radius, color */
-            align-items: center;
-            margin-top: 9px;
-            border-bottom: 1px solid #ddd;
-            padding: 20px 0;
-            position: relative; /* Added position relative for positioning the pinkish-red div */
-        }
-      
-        .player-item .player-info {
-            flex: 1;
-        }
-        .player-item .player-name {
-            font-weight: bold;
-            font-size: large;
-            margin-bottom: 5px;
-        }
-        .player-item .player-stats {
-            color: #888;
-        }
-        .player-item::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px; /* Adjust the height as needed */
-            background-color:  rgb(244, 29, 111); /* Pinkish-red background color */
-            border-radius: 0 0 5px 5px; /* Rounded corners for the div */
-        }
-        a{
-            text-decoration: none;
-            color: black;
-        }
-        .button {
-            margin-top: 7vh;
-            margin-left: 30vw;
-            color: #fff; /* White text color */
-            background-color: #e73a5f; /* Pinkish-red background */
-            font-weight: 500;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            line-height: 2rem;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            padding-top: 0.7rem;
-            padding-bottom: 0.7rem;
-            cursor: pointer;
-            text-align: center;
-            margin-right: 0.5rem;
-            display: inline-flex;
-            align-items: center;
-            border: none;
-        }
-    </style>
+    <title>Players List</title>
 </head>
+<style>
+    <style>
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+  }
+  .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+  }
+  h1 {
+      color: #333;
+      text-align: center;
+  }
+  .player-list {
+      margin-top: 20px;
+      list-style-type: none;
+      padding: 0;
+      
+  }
+  .player-item {
+      display: flex;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Horizontal offset, vertical offset, blur radius, spread radius, color */
+      align-items: center;
+      margin-top: 9px;
+      border-bottom: 1px solid #ddd;
+      padding: 20px 0;
+      position: relative; /* Added position relative for positioning the pinkish-red div */
+  }
+
+  .player-item .player-info {
+      flex: 1;
+  }
+  .player-item .player-name {
+      font-weight: bold;
+      font-size: large;
+      margin-bottom: 5px;
+  }
+  .player-item .player-stats {
+      color: #888;
+  }
+  .player-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px; /* Adjust the height as needed */
+      background-color:  rgb(244, 29, 111); /* Pinkish-red background color */
+      border-radius: 0 0 5px 5px; /* Rounded corners for the div */
+  }
+  a{
+      text-decoration: none;
+      color: black;
+  }
+  .button {
+      margin-top: 7vh;
+      margin-left: 30vw;
+      color: #fff; /* White text color */
+      background-color: #e73a5f; /* Pinkish-red background */
+      font-weight: 500;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      line-height: 2rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-top: 0.7rem;
+      padding-bottom: 0.7rem;
+      cursor: pointer;
+      text-align: center;
+      margin-right: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      border: none;
+  }
+  
+.btn-o{
+margin-top: 7vh;
+      color: #fff; /* White text color */
+      background-color: rgb(229, 87, 10); /* Pinkish-red background */
+      font-weight: 500;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      line-height: 2rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-top: 0.7rem;
+      padding-bottom: 0.7rem;
+      cursor: pointer;
+      text-align: center;
+      margin-right: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      border: none; 
+}
+.btn-p{
+margin-top: 7vh;
+      color: #fff; /* White text color */
+      background-color: rgb(169, 16, 240); /* Pinkish-red background */
+      font-weight: 500;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      line-height: 2rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-top: 0.7rem;
+      padding-bottom: 0.7rem;
+      cursor: pointer;
+      text-align: center;
+      margin-right: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      border: none; 
+}
+.btn-s{
+margin-top: 7vh;
+      color: #fff; /* White text color */
+      background-color: skyblue; /* Pinkish-red background */
+      font-weight: 500;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      line-height: 2rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-top: 0.7rem;
+      padding-bottom: 0.7rem;
+      cursor: pointer;
+      text-align: center;
+      margin-right: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      border: none; 
+}
+</style>
+</style>
 <body>
     <div class="container">
         <h1 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color: rgb(244, 29, 111);">Players List</h1>
-        <ul class="player-list">
-            <% players.forEach(player => { %>
-                <li class="player-item">
-                    <a href="/player/<%= player._id %>">
-                    <div class="player-info">
-                        <div class="player-name"><%= player.name %></div>
-                        <div class="player-stats">
-                            Runs: <%= player.batting.runs %>, 
-                            Wickets: <%= player.bowling.wickets %>, 
-                            Matches: <%= player.matches %>
+        <div style="display: flex; justify-content: space-around;" class="btns">
+            <div id="orangeCapButton" class="btn-o">Orange Cap</div>
+            <div id="purpleCapButton" class="btn-p">Purple Cap</div>
+        </div>
+        <ul id="playerList" class="player-list">
+            <% players.forEach((player, index) => { %>
+                <li class="player-item" data-runs="<%= player.batting.runs %>" data-wickets="<%= player.bowling.wickets %>" data-strikerate="<%= player.batting.strikeRate %>">
+                    <a style="display: flex;" href="/player/<%= player._id %>">
+                        <div style="margin: 10px;" class="playerno">
+                            <%= index + 1 %>
                         </div>
-                    </div>
+                        <div class="player-info">
+                            <div class="player-name"><%= player.name %></div>
+                            <div class="player-stats">
+                                Runs: <%= player.batting.runs %>, 
+                                Wickets: <%= player.bowling.wickets %>, 
+                                Matches: <%= player.matches %>
+                            </div>
+                        </div>
                     </a>
                 </li>
             <% }); %>
         </ul>
         <a href="/">
-            <button class="button">
-                Back
-            </button>
+            <btn class="button">Back</btn>
         </a>
     </div>
+
+    <script>
+        function sortPlayers(attribute) {
+            const playerList = document.getElementById('playerList');
+            const playerItems = Array.from(playerList.getElementsByClassName('player-item'));
+
+            // Sort player items by the specified attribute in descending order
+            playerItems.sort((a, b) => {
+                return b.dataset[attribute] - a.dataset[attribute];
+            });
+
+            // Clear the existing list
+            playerList.innerHTML = '';
+
+            // Re-render the sorted list
+            playerItems.forEach((playerItem, index) => {
+                // Update the serial number
+                playerItem.querySelector('.playerno').textContent = index + 1;
+                playerList.appendChild(playerItem);
+            });
+        }
+
+        document.getElementById('orangeCapButton').addEventListener('click', function() {
+            sortPlayers('runs');
+        });
+
+        document.getElementById('purpleCapButton').addEventListener('click', function() {
+            sortPlayers('wickets');
+        });
+
+        document.getElementById('strikeRateButton').addEventListener('click', function() {
+            sortPlayers('strikerate');
+        });
+    </script>
 </body>
 </html>

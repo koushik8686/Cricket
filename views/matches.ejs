@@ -22,7 +22,21 @@
         margin: 0 auto;
         padding: 20px;
     }
-
+    .wicket-button {
+  margin-top: 10px;
+  padding: 0.8rem 1.6rem;
+  background-color: #e73a5f;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: 40vw;
+  width: 100px;
+}
     h1 {
         text-align: center;
         margin-bottom: 20px;
@@ -138,6 +152,9 @@
 <body>
     <div class="container">
         <h1>All Matches</h1>
+       <a href="/"> <button class="wicket-button">
+Back
+        </button> </a>
         <div class="match-list">
             <% matches.forEach(match => { %>
                 <div class="match-card">
