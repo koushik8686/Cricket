@@ -1250,8 +1250,8 @@ app.get("/confirm/:matchid" ,async function (req , res) {
                 player.bowling.fours += playerStats.fours;
                 player.bowling.sixes += playerStats.sixes;
                 player.bowling.wickets += playerStats.wickets;
-                if (playerStats.balls !== 0) {
-                    player.bowling.economy = parseFloat((playerStats.runs / playerStats.balls * 6).toFixed(2));
+                if (player.bowling.balls !== 0) {
+                    player.bowling.economy = parseFloat(( player.bowling.runs /   player.bowling.balls * 6).toFixed(2));
                 } else {
                     player.bowling.economy = 0; // or any default value you prefer when balls is zero
                 }

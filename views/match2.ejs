@@ -251,7 +251,7 @@
 </head>
 <body onload="showPopup()">
   <h2>2nd Innings </h2>
-  <h4>Target :<%= match.team1_runs +1%>    need <%= match.team1_runs - match.team2_runs %> to win</h4>
+  <h4>Target :<%= match.team1_runs +1%>    need <%= match.team1_runs - match.team2_runs+1 %> to win</h4>
     <div class="container">
         <% if (match.team2_player_batting_stats.length === 0) { %>
         <div class="popup" id="popup">
