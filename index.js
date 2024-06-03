@@ -210,6 +210,7 @@ if (match.team1_wickets==match.team1.length) {
 
 app.post("/match/:id/selectbowler", async function (req, res) {
     try {
+        console.log("yo");
         const match = await Match.findById(req.params.id);
         if (!match) {
             return res.status(404).send('Match not found');
@@ -278,7 +279,7 @@ app.get("/" , function (req , res) {
  app.post('/match/:matchId/ball', async (req, res) => {
     const matchId = req.params.matchId;
     const value = Number(req.body.value);
-    Match.findById(matchId).then(async (match) => {
+   await Match.findById(matchId).then(async (match) => {
         if (value==-1) {
             const tempBatter = match.currentbatters[0];
             match.currentbatters[0] = match.currentbatters[1];
@@ -295,7 +296,6 @@ app.get("/" , function (req , res) {
         
        var id =  match.currentbatters[0].id
        var id1 =  match.currentbowler.id
-       console.log(match.currentbatters);
         match.currentbatters[0].balls += 1
         match.currentbatters[0].runs += value; // Increase runs for current bowler
         match.currentbowler.runs += value; // Increase runs for current bowler
@@ -316,15 +316,10 @@ app.get("/" , function (req , res) {
         match.team1_runs+=Number(value)
         if (match.team1_overs % 0.5 === 0 && match.team1_overs % 1 !== 0) {
             match.team1_overs += 0.5; // Increment by 0.1
-            console.log("heeere");
-            if (match.currentbatters[1].runs!==undefined) {
-                console.log("ok");
-           }
         } else {
             match.team1_overs = parseFloat((match.team1_overs + 0.1).toFixed(1)); // Increment by 0.1 and round to one decimal place
         }
         if (value==1 || value==3) {
-            console.log(match.currentbatters[1].runs);
             if (match.currentbatters[1].runs !==undefined) {
                 const tempBatter = match.currentbatters[0];
                 match.currentbatters[0] = match.currentbatters[1];
@@ -332,9 +327,9 @@ app.get("/" , function (req , res) {
             } 
         }}
        await match.save()
+       await res.send("hlo")
     }) 
     // res.redirect("/match/"+req.params.matchId);
- await res.send("hlo")
 });
 app.post("/match/:matchId/extras/team1",function (req , res) { 
 var extras = Number(req.body.extra)
@@ -363,7 +358,6 @@ Match.findById(req.params.matchId).then(function (match){
 res.send("hlo")
  })
  app.post("/match/:matchId/wicket", function (req, res) {
-    console.log(req.body);
     Match.findById(req.params.matchId).then(async function (match) {
         if (match.team1_overs % 0.5 === 0 && match.team1_overs % 1 !== 0) {
             match.team1_overs += 0.5; // Increment by 0.1
@@ -1297,9 +1291,43 @@ app.get("/:matchid/scorecard", function(req, res){
         res.render("scorecard", {match:match ,a:"no" })
     })
 })
+app.get("/single/:matchid/scorecard", function(req, res){
+    Match.findById(req.params.matchid).then(match => {
+        res.render("matchh", {match:match ,a:"no" })
+    })
+})
 app.get("/matches" , function(req , res){
     Match.find().then(matches => {
         res.render("matches", {matches:matches})
     })
 })
+
+var batstats = []
+var bowlstats = []
+app.get('/singlematchstats', function(req, res){
+    let batstats = []; // Initialize the array before using it
+    Match.find()
+        .then(arr => {
+            arr.forEach(element => {
+                element.team1_player_batting_stats.forEach(stats => {
+                    batstats.push({stats:stats , id:element._id});
+                });
+                element.team2_player_batting_stats.forEach(stats => {
+                    batstats.push({stats:stats , id:element._id});
+                });
+                element.team1_player_bowling_stats.forEach(stats => {
+                    bowlstats.push({stats:stats , id:element._id});
+                });
+                element.team2_player_bowling_stats.forEach(stats => {
+                    bowlstats.push({stats:stats , id:element._id});
+                });
+            });
+            res.render("a",{batstats , bowlstats}); // Send the array after the asynchronous operation is completed
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        });
+});
+
  app.listen(3000 )

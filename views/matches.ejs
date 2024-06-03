@@ -156,7 +156,7 @@
 Back
         </button> </a>
         <div class="match-list">
-            <% matches.forEach(match => { %>
+            <% matches.reverse().forEach(match => { %>
                 <div class="match-card">
                     <a class="match" href="/<%= match._id %>/scorecard">
                         <div class="match-details">

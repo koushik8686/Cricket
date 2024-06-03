@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Match Stats</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-size: 30px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .player-list {
+            margin-top: 20px;
+            list-style-type: none;
+            padding: 0;
+        }
+        .player-item {
+            display: flex;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            align-items: center;
+            margin-top: 9px;
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+            position: relative;
+        }
+        .player-item .player-info {
+            flex: 1;
+        }
+        .player-item .player-name {
+            font-weight: bold;
+            font-size: large;
+            margin-bottom: 5px;
+        }
+        .player-item .player-stats {
+            color: #888;
+        }
+        .player-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: rgb(244, 29, 111);
+            border-radius: 0 0 5px 5px;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+        .buttons {
+            width: 100%;
+            flex-wrap: wrap;
+            display: flex;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-left: 60px;
+        }
+        .buttons button {
+            width: 40%;
+            padding: 50px;
+            margin: 5px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            font-size: 30px;
+            border-radius: 5px;
+        }
+        .buttons button:hover {
+            background-color: #555;
+        }
+        .player-stats{
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 40px;
+        }
+        .bst{
+            width: 50%;
+        }
+        /* Media Query for Mobile Devices */
+    
+        .hidden {
+            display: none;
+        }
+        .btn{
+            background-color: #e73a5f;
+            padding: 30px 60px;
+            color: white;
+            font-size: 40px;
+            text-decoration: none;
+            border: double white;
+            margin-left: 30%;
+        }
+        
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+      <button class="btn"><a style="color: whitesmoke;"  href="/">Back</a></button> 
+        <h1 style="font-size: 80px;">Single Match Stats</h1>
+        <!-- <div class="buttons">
+            <button onclick="showBatting()">Batting</button>
+            <button onclick="showBowling()">Bowling</button>
+        </div>
+         -->
+        <div id="batting-stats">
+            <div class="buttons">
+                <button id="batting-button-runs">Runs</button>
+                <button id="batting-button-strike-rate">Strike Rate</button>
+                <button id="batting-button-fours">Fours</button>
+                <button id="batting-button-sixes">Sixes</button>
+            </div>
+            <hr>
+            <div class="player-list">
+                <% batstats.forEach((stat, index) => { %>
+                    <a href="/single/<%= stat.id %>/scorecard">
+                    <div class="player-item" data-runs="<%= stat.stats.runs %>" data-balls="<%= stat.stats.balls %>" data-fours="<%= stat.stats.fours %>" data-sixes="<%= stat.stats.sixes %>" data-strikerate="<%= stat.stats.strike_rate %>">
+                        <div class="player-info">
+                            <div style="font-size: 46px;" class="player-name" data-index="<%= index + 1 %>"><%= index + 1 %>. <%= stat.stats.name %></div>
+                            <div class="player-stats">
+                                <div class="bst">
+                                    Runs: <%= stat.stats.runs %>
+                                </div>
+                                <div class="bst">
+                                    Balls: <%= stat.stats.balls %>
+                                </div>
+                                <div class="bst">
+                                    Fours: <%= stat.stats.fours %>
+                                </div>
+                                <div class="bst">
+                                    Sixes: <%= stat.stats.sixes %>
+                                </div>
+                                <div class="bst">
+                                    Strike Rate: <%= stat.stats.strike_rate %>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                <% }); %>
+            </div>
+        </div>
+        
+        <!-- <div id="bowling-stats" class="hidden">
+            <h1>Bowling Stats</h1>
+            <div class="buttons">
+                <button id="bowling-button-economy">Economy</button>
+                <button id="bowling-button-wickets">Wickets</button>
+            </div>
+            
+            <div class="player-list">
+                <% bowlstats.forEach((stat, index) => { %>
+                    <a href="/single/<%= stat.id %>/scorecard">
+                    <div class="player-item" data-runs="<%= stat.stats.runs %>" data-balls="<%= stat.stats.balls %>" data-fours="<%= stat.stats.fours %>" data-sixes="<%= stat.stats.sixes %>" data-overs="<%= stat.stats.overs %>" data-wickets="<%= stat.stats.wickets %>" data-economy="<%= stat.stats.economy %>">
+                        <div class="player-info">
+                            <div class="player-name" data-index="<%= index + 1 %>"><%= index + 1 %>. <%= stat.stats.name %></div>
+                            <div class="player-stats">
+                                Runs: <%= stat.stats.runs %>,
+                                Balls: <%= stat.stats.balls %>,
+                                Fours: <%= stat.stats.fours %>,
+                                Sixes: <%= stat.stats.sixes %>,
+                                Overs: <%= stat.stats.overs %>,
+                                Wickets: <%= stat.stats.wickets %>,
+                                Economy: <%= stat.stats.economy %>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                <% }); %>
+            </div>
+            </div> -->
+    </div>
+    
+    <script>
+        function showBatting() {
+            document.getElementById('batting-stats').classList.remove('hidden');
+            document.getElementById('bowling-stats').classList.add('hidden');
+        }
+
+        function showBowling() {
+            document.getElementById('batting-stats').classList.add('hidden');
+            document.getElementById('bowling-stats').classList.remove('hidden');
+        }
+
+        function sortAndDisplay(listSelector, criteria) {
+            const playerList = document.querySelector('#batting-stats .player-list');
+            const players = Array.from(playerList.getElementsByClassName('player-item'));
+
+            players.sort((a, b) => {
+                return b.dataset[criteria] - a.dataset[criteria];
+            });
+
+            playerList.innerHTML = '';
+            players.forEach((player, index) => {
+                const playerNameDiv = player.querySelector('.player-name');
+                playerNameDiv.innerHTML = `${index + 1}. ${playerNameDiv.textContent.split('. ')[1]}`;
+                playerList.appendChild(player);
+            });
+        }
+        function sortAndDisplay(listSelector, criteria) {
+            const playerList = document.querySelector(listSelector);
+            const players = Array.from(playerList.getElementsByClassName('player-item'));
+
+            players.sort((a, b) => {
+                return b.dataset[criteria] - a.dataset[criteria];
+            });
+
+            playerList.innerHTML = '';
+            players.forEach((player, index) => {
+                const playerNameDiv = player.querySelector('.player-name');
+                playerNameDiv.innerHTML = `${index + 1}. ${playerNameDiv.textContent.split('. ')[1]}`;
+                playerList.appendChild(player);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Batting buttons
+            document.getElementById('batting-button-runs').addEventListener('click', () => sortAndDisplay('#batting-stats .player-list', 'runs'));
+            document.getElementById('batting-button-strike-rate').addEventListener('click', () => sortAndDisplay('#batting-stats .player-list', 'strikerate'));
+            document.getElementById('batting-button-fours').addEventListener('click', () => sortAndDisplay('#batting-stats .player-list', 'fours'));
+            document.getElementById('batting-button-sixes').addEventListener('click', () => sortAndDisplay('#batting-stats .player-list', 'sixes'));
+
+            // Bowling buttons
+            document.getElementById('bowling-button-economy').addEventListener('click', () => sortAndDisplay('#bowling-stats .player-list', 'economy'));
+            document.getElementById('bowling-button-wickets').addEventListener('click', () => sortAndDisplay('#bowling-stats .player-list', 'wickets'));
+        });
+        
+    </script>
+</body>
+</html>
