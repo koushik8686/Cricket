@@ -279,13 +279,14 @@ app.get("/" , function (req , res) {
  app.post('/match/:matchId/ball', async (req, res) => {
     const matchId = req.params.matchId;
     const value = Number(req.body.value);
+    console.log(value);
    await Match.findById(matchId).then(async (match) => {
         if (value==-1) {
             const tempBatter = match.currentbatters[0];
             match.currentbatters[0] = match.currentbatters[1];
             match.currentbatters[1] = tempBatter;
             await match.save()
-            return 
+            return res.send("hlo")
         } else{
         
         if (match.currentbowler.overs % 0.5 === 0 && match.currentbowler.overs % 1 !== 0) {
@@ -836,7 +837,7 @@ app.post('/match/:matchId/team2/ball', async (req, res) => {
             match.currentbatters[0] = match.currentbatters[1];
             match.currentbatters[1] = tempBatter;
             await match.save()
-            return 
+            return res.send("hlo")
         } else{
             match.team2_runs+=Number(value)
         if (match.team2_overs % 0.5 === 0 && match.team2_overs % 1 !== 0) {
