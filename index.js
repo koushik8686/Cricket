@@ -881,8 +881,9 @@ app.post('/match/:matchId/team2/ball', async (req, res) => {
             } 
         }}
        await match.save()
+       await res.send("hlo")
+
     }) 
- await res.send("hlo")
 });
 app.post("/match/:matchId/extras/team2",function (req , res) { 
     var extras = Number(req.body.extra)
