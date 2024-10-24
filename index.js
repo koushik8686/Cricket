@@ -5,7 +5,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const {Match} = require("./matchmodel")
-const backup = require("./backup");
 require('dotenv').config();
 app.set('view engine', 'ejs');
 const {playermodel} = require("./models")
@@ -1332,4 +1331,4 @@ app.get('/singlematchstats', function(req, res){
         });
 });
 
- app.listen(3000 )
+ app.listen(3000 )v
