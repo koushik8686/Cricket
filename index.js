@@ -11,6 +11,7 @@ const {playermodel} = require("./models")
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 mongoose.connect(process.env.URL);
+const path = require("path");
 const jsonParser = bodyParser.json();
 app.use(jsonParser); // use it globally
 app.set("views", path.join(__dirname, "views"));
