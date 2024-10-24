@@ -13,7 +13,7 @@ app.use(express.static("public"));
 mongoose.connect(process.env.URL);
 const jsonParser = bodyParser.json();
 app.use(jsonParser); // use it globally
-
+app.set("views", path.join(__dirname, "views"));
 app.get("/addplayers" , function(req , res){
     playermodel.find().then((arr)=>{
         res.render("addplayer" ,{players:arr} );
